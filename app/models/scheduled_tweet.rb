@@ -1,0 +1,2 @@
+class ScheduledTweet < ApplicationRecord
+end

@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Uid:
+  = @scheduled_tweet.uid
+%p
+  %b Text:
+  = @scheduled_tweet.text
+%p
+  %b Properties:
+  = @scheduled_tweet.properties
+
+= link_to 'Edit', edit_scheduled_tweet_path(@scheduled_tweet)
+\|
+= link_to 'Back', scheduled_tweets_path
