@@ -5,7 +5,7 @@ class CreateScheduledTweets < ActiveRecord::Migration[6.0]
       t.text :text
       t.json :properties
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

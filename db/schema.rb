@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_18_223341) do
+ActiveRecord::Schema.define(version: 2020_01_19_064907) do
+
+  create_table "credentials", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token", null: false
+    t.string "secret", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_credentials_on_user_id", unique: true
+  end
 
   create_table "scheduled_tweets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "uid"
@@ -18,6 +27,17 @@ ActiveRecord::Schema.define(version: 2020_01_18_223341) do
     t.json "properties"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "uid", null: false
+    t.string "screen_name", null: false
+    t.boolean "authorized", default: true, null: false
+    t.string "email", default: "", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["screen_name"], name: "index_users_on_screen_name"
+    t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
 end

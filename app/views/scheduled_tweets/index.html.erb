@@ -17,7 +17,11 @@
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
       <a class="navbar-brand" href="#"><%= t('.brand_title') %></a>
-      <a class="btn btn-primary" href="#"><%= t('.sign_in') %></a>
+      <% if user_signed_in? %>
+        <%= current_user.screen_name %>
+      <% else %>
+        <a class="btn btn-primary" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a>
+      <% end %>
     </div>
   </nav>
 
