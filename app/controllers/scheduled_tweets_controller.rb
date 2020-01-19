@@ -5,6 +5,7 @@ class ScheduledTweetsController < ApplicationController
   # GET /scheduled_tweets.json
   def index
     @scheduled_tweets = ScheduledTweet.all
+    render 'landing'
   end
 
   # GET /scheduled_tweets/1
