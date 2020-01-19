@@ -5,7 +5,7 @@ class ScheduledTweetsController < ApplicationController
   # GET /scheduled_tweets.json
   def index
     @scheduled_tweets = ScheduledTweet.all
-    render 'landing'
+    @scheduled_tweets = 3.times.map { |n| ScheduledTweet.new(id: n, text: "text#{n}") }
   end
 
   # GET /scheduled_tweets/1

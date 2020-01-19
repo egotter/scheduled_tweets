@@ -1,0 +1,22 @@
+ja:
+  scheduled_tweets:
+    index:
+      brand_title: 'ツイート予約投稿'
+      sign_in: 'ログイン'
+      tweet: 'ツイート'
+      preview: 'プレビュー'
+      placeholder: 'テキストやリンクをここに入力してください。'
+      schedule_date: '日付指定'
+      schedule_time: '時間指定'
+      name: 'さいころ'
+      screen_name: 'ts_3156'
+      created_at: '・Just now'
+
+
+
+
+
+
+
+
+
