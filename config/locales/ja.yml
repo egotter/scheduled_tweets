@@ -3,7 +3,7 @@ ja:
     index:
       brand_title: 'ツイート予約投稿'
       sign_in: 'ログイン'
-      tweet: 'ツイートのテキスト'
+      tweet: '予約するツイート'
       preview: 'プレビュー'
       placeholder: 'テキストやリンクをここに入力してください。'
       schedule_date: 'ツイートする日付'
@@ -20,6 +20,8 @@ ja:
         video_not_allowed: '動画や音声は、ご自身でアップロードした後にURLをツイートに入れてください。'
         too_big_file: 'ファイルサイズが大きすぎるため、ツイートに添付することができません。（最大 15 MB）'
         invalid_content_type: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。'
+      terms_of_use: '利用規約'
+      privacy_policy: 'プライバシーポリシー'
     create:
       message: '予約したツイートは %{time} に投稿されます。'
   activerecord:
