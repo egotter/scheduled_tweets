@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <title>ScheduledTweets</title>
+  <title><%= t('.brand_title') %></title>
   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
   <meta charset='utf-8'>
   <meta content='IE=edge' http-equiv='X-UA-Compatible'>
@@ -29,13 +29,60 @@
 
 <body>
 
+<!-- Navigation -->
+<nav class="navbar navbar-light bg-light static-top">
+  <div class="container">
+    <a class="navbar-brand" href="#"><%= t('.brand_title') %></a>
+    <% if user_signed_in? %>
+      @<%= current_user.screen_name %>
+    <% else %>
+      <a class="btn btn-primary" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a>
+    <% end %>
+  </div>
+</nav>
+
 <% if notice %>
-  <p class="notice"><%= notice %></p>
+  <div class="container">
+    <p class="notice"><%= notice %></p>
+  </div>
 <% end %>
 <% if alert %>
-  <p class="alert"><%= alert %></p>
+  <div class="container">
+    <p class="alert"><%= alert %></p>
+  </div>
 <% end %>
 
 <%= yield %>
+
+<!-- Footer -->
+<footer class="footer bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+        <ul class="list-inline mb-2">
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="https://egotter.com/terms_of_service" target="_blank"><%= t('.terms_of_use') %></a>
+          </li>
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="https://egotter.com/privacy_policy" target="_blank"><%= t('.privacy_policy') %></a>
+          </li>
+        </ul>
+        <p class="text-muted small mb-4 mb-lg-0">&copy; <%= t('.brand_title') %> 2020. All Rights Reserved.</p>
+      </div>
+      <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">
+            <a href="https://twitter.com/ego_tter" target="_blank">
+              <i class="fab fa-twitter-square fa-2x fa-fw"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

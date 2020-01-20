@@ -1,0 +1,21 @@
+<%= form_tag api_v1_scheduled_tweets_path, id: 'form', method: :post, multipart: true, remote: true do %>
+  <ul class="list-inline">
+    <li class="list-inline-item mr-4">
+      <div class="form-group">
+        <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
+        <input type="text" id="date-picker" class="form-control" name="scheduled-date" placeholder="<%= Time.zone.now.year %>/00/00">
+      </div>
+    </li>
+    <li class="list-inline-item">
+      <div class="form-group">
+        <label for="time-picker" class="specified_time-label"><%= t('.schedule_time') %></label>
+        <input type="text" id="time-picker" class="form-control" name="scheduled-time" placeholder="00:00" data-time-format="H:i">
+      </div>
+    </li>
+  </ul>
+
+  <%= hidden_field_tag :tweet_text, '', class: 'tweet-text' %>
+  <input type="file" id="input-image" name="input-image" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;">
+
+  <button id="submit" type="submit" class="btn btn-success"><%= t('.create') %></button>
+<% end %>
