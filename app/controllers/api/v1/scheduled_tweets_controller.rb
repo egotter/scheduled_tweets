@@ -1,6 +1,10 @@
 class Api::V1::ScheduledTweetsController < ApiController
   before_action :authenticate_user!
 
+  rescue_from Exception do |e|
+    render json: {error: e.message}, status: :internal_server_error
+  end
+
   def index
     render json: current_user.scheduled_tweets
   end
@@ -20,9 +24,10 @@ class Api::V1::ScheduledTweetsController < ApiController
         tweet.images.attach(params['input-image'])
       end
 
-      render json: tweet
+      message = I18n.t('scheduled_tweets.create.message', time: tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M"))
+      render json: {message: message, record: tweet}
     else
-      render json: {error: tweet.errors.full_messages, error_attributes: tweet.errors.keys, model: tweet}, status: :unprocessable_entity
+      render json: {error: tweet.errors.full_messages, error_attributes: tweet.errors.keys, record: tweet}, status: :unprocessable_entity
     end
   end
 end

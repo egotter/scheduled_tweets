@@ -16,6 +16,8 @@ ja:
       scheduled: '予約済みのツイート'
       published: '投稿済みのツイート'
       none: 'なし'
+    create:
+      message: '予約したツイートは %{time} に投稿されます。'
   activerecord:
     models:
     attributes:

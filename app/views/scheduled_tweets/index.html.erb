@@ -138,13 +138,15 @@
         var response = e.detail[0];
         console.log('beforeSend', response);
         labels.clear();
+        successMessage.hide();
+        errorMessage.hide();
       });
 
       $('#form').on('ajax:success', function (e) {
         var response = e.detail[0];
         console.log('success', response);
 
-        successMessage.show(response);
+        successMessage.show(response['message']);
       });
 
       $('#form').on('ajax:error', function (e) {

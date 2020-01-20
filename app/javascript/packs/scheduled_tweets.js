@@ -147,10 +147,15 @@ class AlertMessage {
     });
   }
 
-  show(html) {
-    console.log(html);
-    this.$el.find('.message').html(html);
+  show(message) {
+    console.log('show', message);
+    this.$el.find('.message').text(message);
     this.$el.parent().show();
+  }
+
+  hide() {
+    this.$el.find('.message').text('');
+    this.$el.parent().hide();
   }
 }
 
