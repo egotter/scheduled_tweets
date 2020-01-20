@@ -1,5 +1,10 @@
 class User < ApplicationRecord
-  devise :omniauthable
+  devise :rememberable, :omniauthable
+
+  has_one :credential
+  has_many :scheduled_tweets
+
+  attr_accessor :name
 
   class << self
     def update_or_create_with_token!(values)
@@ -17,5 +22,9 @@ class User < ApplicationRecord
 
       user
     end
+  end
+
+  def api_client
+    ApiClient.new(self)
   end
 end

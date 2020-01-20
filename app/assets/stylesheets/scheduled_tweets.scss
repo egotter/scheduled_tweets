@@ -47,10 +47,9 @@ blockquote.twitter-tweet {
   border-style: solid;
   border-width: 1px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-  //margin: 10px 5px;
   padding: 0 16px 16px 16px;
-  //max-width: 468px;
   width: 100%;
+  color: #2f3638;
 
   .name {
     font-weight: bold;
@@ -59,7 +58,7 @@ blockquote.twitter-tweet {
   }
 
   .screen-name,
-  .created-at {
+  .published-at {
     font-weight: normal;
     font-size: 12px;
     color: #5d6366;
@@ -115,4 +114,18 @@ blockquote.twitter-tweet {
 
 #time-picker {
   width: 150px;
+}
+
+#not-published-tweets,
+#published-tweets {
+  max-width: 540px;
+
+  .alert {
+    margin: 0;
+    padding: 0;
+  }
+
+  .title {
+    margin-bottom: 8px;
+  }
 }

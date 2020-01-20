@@ -1,0 +1,35 @@
+<blockquote class="twitter-tweet pt-3">
+  <div class="media">
+    <div class="mr-3">
+      <img src="<%= user.profile_image_url ? user.profile_image_url : image_path('/image_48x48.png') %>" class="rounded-circle" alt="...">
+    </div>
+    <div class="media-body">
+      <div class="mb-2">
+        <span class="name"><%= user.name %></span>
+        <span class="screen-name">@<%= user.screen_name %></span>
+        <span class="published-at">・<%= tweet.persisted? ? tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M") : time_ago_in_words(tweet.time.in_time_zone('Tokyo')) %></span>
+      </div>
+      <p class="tweet-preview"><%= tweet.text %></p>
+
+      <% if tweet.persisted? && tweet.images.any? %>
+        <div class="preview-image-container">
+          <%= image_tag tweet.images[0], class: 'preview-image' %>
+        </div>
+      <% else %>
+        <div style="display: none;" class="preview-image-container alert alert-light alert-dismissible fade show" role="alert">
+          <img class="preview-image">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% end %>
+
+      <div class="tweet-actions">
+        <i class="far fa-comment mr-3"></i>
+        <i class="fas fa-retweet mr-3"></i>
+        <i class="far fa-heart mr-3"></i>
+        <i class="far fa-envelope mr-3"></i>
+      </div>
+    </div>
+  </div>
+</blockquote>

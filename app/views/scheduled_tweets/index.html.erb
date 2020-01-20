@@ -13,12 +13,14 @@
 
 <body>
 
+  <%= javascript_pack_tag 'scheduled_tweets' %>
+
   <!-- Navigation -->
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
       <a class="navbar-brand" href="#"><%= t('.brand_title') %></a>
       <% if user_signed_in? %>
-        <%= current_user.screen_name %>
+        @<%= current_user.screen_name %>
       <% else %>
         <a class="btn btn-primary" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a>
       <% end %>
@@ -28,11 +30,21 @@
   <div class="vertical-spacing"></div>
 
   <div class="container">
+    <%= render partial: 'alert_message', locals: {type: 'success'} %>
+    <%= render partial: 'alert_message', locals: {type: 'warning'} %>
+  </div>
+
+  <div class="container">
     <div class="row">
       <div class="col-xs-12 col-lg-6">
         <div>
-          <div class="float-left textarea-title"><%= t('.tweet') %></div>
-          <div class="float-right"><div class="text-right remaining-count">280</div></div>
+          <div class="float-left textarea-title text-label">
+            <i class="fas fa-spell-check mr-1"></i>
+            <%= t('.tweet') %>
+          </div>
+          <div class="float-right">
+            <div class="text-right remaining-count">280</div>
+          </div>
         </div>
         <div class="clearfix"></div>
         <div class="textarea-container">
@@ -47,153 +59,110 @@
       </div>
 
       <div class="col-xs-12 col-lg-6">
-        <div class="preview-title"><%= t('.preview') %></div>
-        <blockquote class="twitter-tweet pt-3">
-          <div class="media">
-            <div class="mr-3">
-              <img src="https://pbs.twimg.com/profile_images/1159025491577208833/_S43fQeI_normal.jpg" class="rounded-circle" alt="...">
-            </div>
-            <div class="media-body">
-              <div class="mb-2">
-                <span class="name"><%= t('.name') %></span>
-                <span class="screen-name"><%= t('.screen_name') %></span>
-                <span class="created-at"><%= t('.created_at') %></span>
-              </div>
-              <p class="tweet-preview"></p>
+        <div class="d-block d-sm-none">
+          <div class="my-5"></div>
+        </div>
 
-              <div style="display: none;" class="preview-image-container alert alert-light alert-dismissible fade show" role="alert">
-                <img class="preview-image">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-
-              <div class="tweet-actions">
-                <i class="far fa-comment mr-3"></i>
-                <i class="fas fa-retweet mr-3"></i>
-                <i class="far fa-heart mr-3"></i>
-                <i class="far fa-envelope mr-3" ></i>
-              </div>
-            </div>
-          </div>
-        </blockquote>
+        <div class="preview-title">
+          <i class="fab fa-twitter mr-1"></i>
+          <%= t('.preview') %>
+        </div>
+        <div id="live-preview">
+          <%= render partial: 'tweet_preview', locals: {user: @preview_user, tweet: @preview_tweet} %>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="vertical-spacing"></div>
-    <hr>
-    <div class="vertical-spacing"></div>
+  <%= render partial: 'divider' %>
 
-    <form>
+  <div class="container">
+    <%= form_tag api_v1_scheduled_tweets_path, id: 'form', method: :post, multipart: true, remote: true do %>
       <div class="form-group">
-        <label for="date-picker"><%= t('.schedule_date') %></label>
+        <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
         <div><input type="text" id="date-picker" class="form-control" name="scheduled-date" placeholder="<%= Time.zone.now.year %>/00/00"></div>
       </div>
 
       <div class="form-group">
-        <label for="time-picker"><%= t('.schedule_time') %></label>
+        <label for="time-picker" class="specified_time-label"><%= t('.schedule_time') %></label>
         <div><input type="text" id="time-picker" class="form-control" name="scheduled-time" placeholder="00:00" data-time-format="H:i"></div>
       </div>
 
+      <%= hidden_field_tag :tweet_text, '', class: 'tweet-text' %>
       <div><input type="file" id="input-image" name="input-image" style="display: none;"></div>
 
       <div class="vertical-spacing"></div>
-      <button type="submit" class="btn btn-success">ツイートを予約する</button>
-    </form>
-  </div>
-
-  <div class="vertical-spacing-2"></div>
-
-  <div class="vertical-spacing"></div>
-  <hr>
-  <div class="vertical-spacing"></div>
-
-  <div class="container">
-    <% @scheduled_tweets.each do |tweet| %>
-      <div><%= tweet.id %></div>
+      <button id="submit" type="submit" class="btn btn-success"><%= t('.do_schedule') %></button>
     <% end %>
   </div>
 
+  <%= render partial: 'divider' %>
 
-      <script>
+  <div class="container">
+    <div id="not-published-tweets">
+      <div class="title"><%= t('.scheduled') %></div>
+      <% if @scheduled_tweets.not_published.any? %>
+        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.not_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+      <% else %>
+        <%= t('.none') %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="published-tweets">
+      <div class="title"><%= t('.published') %></div>
+      <% if @scheduled_tweets.published.any? %>
+        <%= render(partial: 'published_tweet', collection: @scheduled_tweets.published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+      <% else %>
+        <%= t('.none') %>
+      <% end %>
+    </div>
+  </div>
+
+  <script>
     $(function () {
-      $('#input-text').autosize();
+      new InputArea();
+      var fileUploader = new FileUploader();
+      new ImagePreview(fileUploader);
 
-      $('#input-text').on('keyup', function () {
-        var remainingMax = 280;
-        var $remainingCount = $('.remaining-count');
-        var $preview = $('.tweet-preview');
+      new TimePicker();
+      new DatePicker({maxDate: '<%= 1.week.since.strftime("%Y/%m/%d") %>'});
 
-        var $input = $(this);
-        var previous = $input.data('previous');
-        var current = $input.val();
+      var successMessage = new AlertMessage('#success-message');
+      var errorMessage = new AlertMessage('#warning-message');
 
-        if (previous !== current) {
-          console.log('text1', current);
-          $remainingCount.text(remainingMax - current.length);
-          var str = escapeTags(current).replace(/(?:\r\n|\r|\n)/g, '<br>');
-          console.log('text2', str);
-          $preview.html(str);
-          $input.data('previous', current);
+      var labels = new AttributeLabels();
+
+      $('#form').on('ajax:beforeSend', function (e) {
+        var response = e.detail[0];
+        console.log('beforeSend', response);
+        labels.clear();
+      });
+
+      $('#form').on('ajax:success', function (e) {
+        var response = e.detail[0];
+        console.log('success', response);
+
+        successMessage.show(response);
+      });
+
+      $('#form').on('ajax:error', function (e) {
+        var response = e.detail[0];
+        console.log('error', response);
+
+        var message = response['error'];
+        if (Array.isArray(message)) {
+          message = message.join('<%= t('.delim') %>');
+        }
+        errorMessage.show(message);
+
+        if (response['error_attributes']) {
+          for (var attr of response['error_attributes']) {
+            $('.' + attr + '-label').css('color', '#ff0000');
+          }
         }
       });
-
-      $('.upload-file').on('click', function () {
-        $('#input-image').trigger('click');
-      });
-
-      $('.preview-image-container').on('close.bs.alert', function (e) {
-        $(this).hide();
-        $('#input-image')[0].value = '';
-        $('.preview-image').attr('src', null);
-        return false;
-      });
-
-      function readURL(input) {
-        console.log('readURL', input);
-
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-
-          reader.onload = function (e) {
-            $('.preview-image').attr('src', e.target.result);
-            $('.preview-image-container').show();
-          };
-
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
-
-      $('#input-image').change(function () {
-        readURL(this);
-      });
-
-      function escapeTags(text) {
-        var chars = {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;'
-        };
-
-        function replace(c) {
-          return chars[c] || c;
-        }
-
-        return text.replace(/[&<>]/g, replace);
-      }
-
-      $('#time-picker').timepicker({
-        'scrollDefault': 'now',
-        'minTime': '0:00',
-        'maxTime': '23:59',
-        'step': 5
-      });
-    });
-
-    flatpickr('#date-picker', {
-      minDate: 'today',
-      maxDate: '<%= 1.week.since.strftime("%Y/%m/%d") %>',
-      allowInput: true
     });
   </script>
 

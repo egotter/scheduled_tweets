@@ -4,8 +4,9 @@ class ScheduledTweetsController < ApplicationController
   # GET /scheduled_tweets
   # GET /scheduled_tweets.json
   def index
-    @scheduled_tweets = ScheduledTweet.all
-    @scheduled_tweets = 3.times.map { |n| ScheduledTweet.new(id: n, text: "text#{n}") }
+    @preview_user = PreviewUser.new(user: current_user)
+    @preview_tweet = ScheduledTweet.new(text: '', time: Time.zone.now)
+    @scheduled_tweets = user_signed_in? ? current_user.scheduled_tweets : ScheduledTweet.none
   end
 
   # GET /scheduled_tweets/1
