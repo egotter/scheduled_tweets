@@ -51,7 +51,7 @@
           <div class="textarea-outer">
             <textarea id="input-text" placeholder="<%= t('.placeholder') %>"></textarea>
           </div>
-          <div class="input-actions" style="padding-left: 15px; padding-top: 5px; padding-bottom: 5px; border-top: 1px solid #ccc;">
+          <div class="input-actions">
             <span class="upload-file"><i class="far fa-image mr-3"></i></span>
             <span class="input-emoji"><i class="far fa-smile mr-3"></i></span>
           </div>
@@ -89,7 +89,7 @@
       </div>
 
       <%= hidden_field_tag :tweet_text, '', class: 'tweet-text' %>
-      <div><input type="file" id="input-image" name="input-image" style="display: none;"></div>
+      <div><input type="file" id="input-image" name="input-image" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;"></div>
 
       <div class="vertical-spacing"></div>
       <button id="submit" type="submit" class="btn btn-success"><%= t('.do_schedule') %></button>
@@ -122,17 +122,32 @@
 
   <script>
     $(function () {
-      new InputArea();
-      var fileUploader = new FileUploader();
-      new ImagePreview(fileUploader);
-
-      new TimePicker();
-      new DatePicker({maxDate: '<%= 1.week.since.strftime("%Y/%m/%d") %>'});
-
+      var errors = {
+        videoNotAllowed: '<%= t('.errors.video_not_allowed') %>',
+        fileSizeTooBig: '<%= t('.errors.too_big_file') %>',
+        invalidContentType: '<%= t('.errors.invalid_content_type') %>'
+      };
+      var labels = new AttributeLabels();
       var successMessage = new AlertMessage('#success-message');
       var errorMessage = new AlertMessage('#warning-message');
 
-      var labels = new AttributeLabels();
+      new InputArea();
+
+      var fileUploader = new FileUploader();
+      fileUploader.on('error', function (type) {
+        labels.clear();
+        successMessage.hide();
+        errorMessage.hide();
+        errorMessage.show(errors[type]);
+      });
+
+      var imagePreview = new ImagePreview();
+      imagePreview.on('close', function () {
+        fileUploader.clear();
+      });
+
+      new TimePicker();
+      new DatePicker({maxDate: '<%= 1.week.since.strftime("%Y/%m/%d") %>'});
 
       $('#form').on('ajax:beforeSend', function (e) {
         var response = e.detail[0];

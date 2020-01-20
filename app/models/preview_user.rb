@@ -6,7 +6,7 @@ class PreviewUser
       begin
         twitter_user = user.api_client.user
       rescue => e
-        Rails.logger.info e.inspect
+        Rails.logger.warn e.inspect
         twitter_user = {screen_name: 'name', name: 'NAME', profile_image_url: nil}
       end
 

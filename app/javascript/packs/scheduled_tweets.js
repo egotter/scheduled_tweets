@@ -92,13 +92,25 @@ class TimePicker {
 window.TimePicker = TimePicker;
 
 class ImagePreview {
-  constructor(fileUploader) {
+  constructor() {
+    this.callback = null;
+    var self = this;
+
     $('#live-preview .preview-image-container').on('close.bs.alert', function (e) {
       $(this).hide();
-      fileUploader.clear();
       $('#live-preview .preview-image').attr('src', null);
+
+      if (self.callback) {
+        self.callback();
+      }
       return false;
     });
+  }
+
+  on(type, fn) {
+    if (type === 'close') {
+      this.callback = fn;
+    }
   }
 }
 
@@ -108,6 +120,7 @@ class FileUploader {
   constructor() {
     var $el = this.$el = $('#input-image');
     var self = this;
+    this.error_callback = null;
 
     $('.upload-file').on('click', function () {
       $el.trigger('click');
@@ -124,6 +137,29 @@ class FileUploader {
 
   readURL(input) {
     if (input.files && input.files[0]) {
+      var file = input.files[0];
+
+      if (file.type.match(/video|audio/i)) {
+        if (this.error_callback) {
+          this.error_callback('videoNotAllowed');
+        }
+        return;
+      }
+
+      if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+        if (this.error_callback) {
+          this.error_callback('invalidContentType');
+        }
+        return;
+      }
+
+      if (file.size > 15000000) { // 15 MB
+        if (this.error_callback) {
+          this.error_callback('fileSizeTooBig');
+        }
+        return;
+      }
+
       var reader = new FileReader();
 
       reader.onload = function (e) {
@@ -131,7 +167,13 @@ class FileUploader {
         $('#live-preview .preview-image-container').show();
       };
 
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  on(type, fn) {
+    if (type === 'error') {
+      this.error_callback = fn;
     }
   }
 }

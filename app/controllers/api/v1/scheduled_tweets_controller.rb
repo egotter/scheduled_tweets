@@ -12,6 +12,14 @@ class Api::V1::ScheduledTweetsController < ApiController
   def create
     logger.warn params.inspect
 
+    if params['input-image']
+      uploaded_file = UploadedFile.new(size: params['input-image'].size, content_type: params['input-image'].content_type)
+      unless uploaded_file.valid?
+        render json: {error: uploaded_file.errors.full_messages, error_attributes: uploaded_file.errors.keys, record: uploaded_file}, status: :unprocessable_entity
+        return
+      end
+    end
+
     tweet = ScheduledTweet.new(
         user_id: current_user.id,
         text: params[:tweet_text],

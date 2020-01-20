@@ -16,6 +16,10 @@ ja:
       scheduled: '予約済みのツイート'
       published: '投稿済みのツイート'
       none: 'なし'
+      errors:
+        video_not_allowed: '動画や音声は、ご自身でアップロードした後にURLをツイートに入れてください。'
+        too_big_file: 'ファイルサイズが大きすぎるため、ツイートに添付することができません。（最大 15 MB）'
+        invalid_content_type: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。'
     create:
       message: '予約したツイートは %{time} に投稿されます。'
   activerecord:
@@ -26,12 +30,24 @@ ja:
         specified_date: '日付'
         specified_time: '時間'
         time: '日付と時間'
+      uploaded_file:
+        size: 'ファイルサイズ'
+        content_type: 'ファイルの種類'
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+  activemodel:
+    attributes:
+      uploaded_file:
+        size: 'ファイルサイズ'
+        content_type: 'ファイルの種類'
+    errors:
+      messages:
+        file_size_too_big: 'が大きすぎるため、ツイートに添付することができません。（最大 15 MB）'
+        invalid_content_type: 'は JPG、GIF、PNG のいずれかである必要があります。'
   date:
     abbr_day_names:
       - 日

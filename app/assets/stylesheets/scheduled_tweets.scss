@@ -94,6 +94,11 @@ blockquote.twitter-tweet {
 }
 
 .input-actions {
+  padding-left: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: 1px solid #ccc;
+
   span {
     cursor: pointer;
   }
@@ -103,9 +108,14 @@ blockquote.twitter-tweet {
   opacity: 0.5;
 }
 
+.preview-image-container {
+  margin: 0;
+  padding: 0;
+}
+
 .preview-image {
-  max-width: 300px;
-  max-height: 300px;
+  width: 100%;
+  border: 1px solid #eee;
 }
 
 #date-picker {
