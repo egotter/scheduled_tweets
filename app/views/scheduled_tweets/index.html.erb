@@ -1,199 +1,199 @@
-  <%= javascript_pack_tag 'scheduled_tweets' %>
+<%= javascript_pack_tag 'scheduled_tweets' %>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-light bg-light static-top">
-    <div class="container">
-      <a class="navbar-brand" href="#"><%= t('.brand_title') %></a>
-      <% if user_signed_in? %>
-        @<%= current_user.screen_name %>
-      <% else %>
-        <a class="btn btn-primary" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a>
-      <% end %>
-    </div>
-  </nav>
-
-  <div class="vertical-spacing"></div>
-
+<!-- Navigation -->
+<nav class="navbar navbar-light bg-light static-top">
   <div class="container">
-    <%= render partial: 'alert_message', locals: {type: 'success'} %>
-    <%= render partial: 'alert_message', locals: {type: 'warning'} %>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-lg-6">
-        <div>
-          <div class="float-left textarea-title text-label">
-            <i class="fas fa-spell-check mr-1"></i>
-            <%= t('.tweet') %>
-          </div>
-          <div class="float-right">
-            <div class="text-right remaining-count">280</div>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-        <div class="textarea-container">
-          <div class="textarea-outer">
-            <textarea id="input-text" placeholder="<%= t('.placeholder') %>"></textarea>
-          </div>
-          <div class="input-actions">
-            <span class="upload-file"><i class="far fa-image mr-3"></i></span>
-            <span class="input-emoji" style="display: none;"><i class="far fa-smile mr-3"></i></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-lg-6">
-        <div class="d-block d-sm-none">
-          <div class="my-5"></div>
-        </div>
-
-        <div class="preview-title">
-          <i class="fab fa-twitter mr-1"></i>
-          <%= t('.preview') %>
-        </div>
-        <div id="live-preview">
-          <%= render partial: 'tweet_preview', locals: {user: @preview_user, tweet: @preview_tweet} %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <%= render partial: 'divider' %>
-
-  <div class="container">
-    <%= form_tag api_v1_scheduled_tweets_path, id: 'form', method: :post, multipart: true, remote: true do %>
-      <div class="form-group">
-        <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
-        <div><input type="text" id="date-picker" class="form-control" name="scheduled-date" placeholder="<%= Time.zone.now.year %>/00/00"></div>
-      </div>
-
-      <div class="form-group">
-        <label for="time-picker" class="specified_time-label"><%= t('.schedule_time') %></label>
-        <div><input type="text" id="time-picker" class="form-control" name="scheduled-time" placeholder="00:00" data-time-format="H:i"></div>
-      </div>
-
-      <%= hidden_field_tag :tweet_text, '', class: 'tweet-text' %>
-      <div><input type="file" id="input-image" name="input-image" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;"></div>
-
-      <div class="vertical-spacing"></div>
-      <button id="submit" type="submit" class="btn btn-success"><%= t('.do_schedule') %></button>
+    <a class="navbar-brand" href="#"><%= t('.brand_title') %></a>
+    <% if user_signed_in? %>
+      @<%= current_user.screen_name %>
+    <% else %>
+      <a class="btn btn-primary" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a>
     <% end %>
   </div>
+</nav>
 
-  <%= render partial: 'divider' %>
+<div class="vertical-spacing"></div>
 
-  <div class="container">
-    <div id="not-published-tweets">
-      <div class="title"><%= t('.scheduled') %></div>
-      <% if @scheduled_tweets.not_published.any? %>
-        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.not_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
-      <% else %>
-        <%= t('.none') %>
-      <% end %>
-    </div>
-  </div>
+<div class="container">
+  <%= render partial: 'alert_message', locals: {type: 'success'} %>
+  <%= render partial: 'alert_message', locals: {type: 'warning'} %>
+</div>
 
-  <div class="container">
-    <div id="published-tweets">
-      <div class="title"><%= t('.published') %></div>
-      <% if @scheduled_tweets.published.any? %>
-        <%= render(partial: 'published_tweet', collection: @scheduled_tweets.published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
-      <% else %>
-        <%= t('.none') %>
-      <% end %>
-    </div>
-  </div>
-
-  <script>
-    $(function () {
-      var errors = {
-        videoNotAllowed: '<%= t('.errors.video_not_allowed') %>',
-        fileSizeTooBig: '<%= t('.errors.too_big_file') %>',
-        invalidContentType: '<%= t('.errors.invalid_content_type') %>'
-      };
-      var labels = new AttributeLabels();
-      var successMessage = new AlertMessage('#success-message');
-      var errorMessage = new AlertMessage('#warning-message');
-
-      new InputArea();
-
-      var fileUploader = new FileUploader();
-      fileUploader.on('error', function (type) {
-        labels.clear();
-        successMessage.hide();
-        errorMessage.hide();
-        errorMessage.show(errors[type]);
-      });
-
-      var imagePreview = new ImagePreview();
-      imagePreview.on('close', function () {
-        fileUploader.clear();
-      });
-
-      new TimePicker();
-      new DatePicker({maxDate: '<%= 1.week.since.strftime("%Y/%m/%d") %>'});
-
-      $('#form').on('ajax:beforeSend', function (e) {
-        var response = e.detail[0];
-        console.log('beforeSend', response);
-        labels.clear();
-        successMessage.hide();
-        errorMessage.hide();
-      });
-
-      $('#form').on('ajax:success', function (e) {
-        var response = e.detail[0];
-        console.log('success', response);
-
-        successMessage.show(response['message']);
-      });
-
-      $('#form').on('ajax:error', function (e) {
-        var response = e.detail[0];
-        console.log('error', response);
-
-        var message = response['error'];
-        if (Array.isArray(message)) {
-          message = message.join('<%= t('.delim') %>');
-        }
-        errorMessage.show(message);
-
-        if (response['error_attributes']) {
-          for (var attr of response['error_attributes']) {
-            $('.' + attr + '-label').css('color', '#ff0000');
-          }
-        }
-      });
-    });
-  </script>
-
-  <!-- Footer -->
-  <footer class="footer bg-light">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
-          <ul class="list-inline mb-2">
-            <li class="list-inline-item">&sdot;</li>
-            <li class="list-inline-item">
-              <a href="https://egotter.com/terms_of_service" target="_blank"><%= t('.terms_of_use') %></a>
-            </li>
-            <li class="list-inline-item">&sdot;</li>
-            <li class="list-inline-item">
-              <a href="https://egotter.com/privacy_policy" target="_blank"><%= t('.privacy_policy') %></a>
-            </li>
-          </ul>
-          <p class="text-muted small mb-4 mb-lg-0">&copy; <%= t('.brand_title') %> 2020. All Rights Reserved.</p>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-lg-6">
+      <div>
+        <div class="float-left textarea-title text-label">
+          <i class="fas fa-spell-check mr-1"></i>
+          <%= t('.tweet') %>
         </div>
-        <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
-          <ul class="list-inline mb-0">
-            <li class="list-inline-item">
-              <a href="https://twitter.com/ego_tter" target="_blank">
-                <i class="fab fa-twitter-square fa-2x fa-fw"></i>
-              </a>
-            </li>
-          </ul>
+        <div class="float-right">
+          <div class="text-right remaining-count">280</div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="textarea-container">
+        <div class="textarea-outer">
+          <textarea id="input-text" placeholder="<%= t('.placeholder') %>"></textarea>
+        </div>
+        <div class="input-actions">
+          <span class="upload-file"><i class="far fa-image mr-3"></i></span>
+          <span class="input-emoji" style="display: none;"><i class="far fa-smile mr-3"></i></span>
         </div>
       </div>
     </div>
-  </footer>
+
+    <div class="col-xs-12 col-lg-6">
+      <div class="d-block d-sm-none">
+        <div class="my-5"></div>
+      </div>
+
+      <div class="preview-title">
+        <i class="fab fa-twitter mr-1"></i>
+        <%= t('.preview') %>
+      </div>
+      <div id="live-preview">
+        <%= render partial: 'tweet_preview', locals: {user: @preview_user, tweet: @preview_tweet} %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'divider' %>
+
+<div class="container">
+  <%= form_tag api_v1_scheduled_tweets_path, id: 'form', method: :post, multipart: true, remote: true do %>
+    <div class="form-group">
+      <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
+      <input type="text" id="date-picker" class="form-control" name="scheduled-date" placeholder="<%= Time.zone.now.year %>/00/00">
+    </div>
+
+    <div class="form-group">
+      <label for="time-picker" class="specified_time-label"><%= t('.schedule_time') %></label>
+      <input type="text" id="time-picker" class="form-control" name="scheduled-time" placeholder="00:00" data-time-format="H:i">
+    </div>
+
+    <%= hidden_field_tag :tweet_text, '', class: 'tweet-text' %>
+    <input type="file" id="input-image" name="input-image" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;">
+
+    <div class="vertical-spacing"></div>
+    <button id="submit" type="submit" class="btn btn-success"><%= t('.do_schedule') %></button>
+  <% end %>
+</div>
+
+<%= render partial: 'divider' %>
+
+<div class="container">
+  <div id="not-published-tweets">
+    <div class="title"><%= t('.scheduled') %></div>
+    <% if @scheduled_tweets.not_published.any? %>
+      <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.not_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+    <% else %>
+      <%= t('.none') %>
+    <% end %>
+  </div>
+</div>
+
+<div class="container">
+  <div id="published-tweets">
+    <div class="title"><%= t('.published') %></div>
+    <% if @scheduled_tweets.published.any? %>
+      <%= render(partial: 'published_tweet', collection: @scheduled_tweets.published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+    <% else %>
+      <%= t('.none') %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    var errors = {
+      videoNotAllowed: '<%= t('.errors.video_not_allowed') %>',
+      fileSizeTooBig: '<%= t('.errors.too_big_file') %>',
+      invalidContentType: '<%= t('.errors.invalid_content_type') %>'
+    };
+    var labels = new AttributeLabels();
+    var successMessage = new AlertMessage('#success-message');
+    var errorMessage = new AlertMessage('#warning-message');
+
+    new InputArea();
+
+    var fileUploader = new FileUploader();
+    fileUploader.on('error', function (type) {
+      labels.clear();
+      successMessage.hide();
+      errorMessage.hide();
+      errorMessage.show(errors[type]);
+    });
+
+    var imagePreview = new ImagePreview();
+    imagePreview.on('close', function () {
+      fileUploader.clear();
+    });
+
+    new TimePicker();
+    new DatePicker({maxDate: '<%= 1.week.since.strftime("%Y/%m/%d") %>'});
+
+    $('#form').on('ajax:beforeSend', function (e) {
+      var response = e.detail[0];
+      console.log('beforeSend', response);
+      labels.clear();
+      successMessage.hide();
+      errorMessage.hide();
+    });
+
+    $('#form').on('ajax:success', function (e) {
+      var response = e.detail[0];
+      console.log('success', response);
+
+      successMessage.show(response['message']);
+    });
+
+    $('#form').on('ajax:error', function (e) {
+      var response = e.detail[0];
+      console.log('error', response);
+
+      var message = response['error'];
+      if (Array.isArray(message)) {
+        message = message.join('<%= t('.delim') %>');
+      }
+      errorMessage.show(message);
+
+      if (response['error_attributes']) {
+        for (var attr of response['error_attributes']) {
+          $('.' + attr + '-label').css('color', '#ff0000');
+        }
+      }
+    });
+  });
+</script>
+
+<!-- Footer -->
+<footer class="footer bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+        <ul class="list-inline mb-2">
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="https://egotter.com/terms_of_service" target="_blank"><%= t('.terms_of_use') %></a>
+          </li>
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="https://egotter.com/privacy_policy" target="_blank"><%= t('.privacy_policy') %></a>
+          </li>
+        </ul>
+        <p class="text-muted small mb-4 mb-lg-0">&copy; <%= t('.brand_title') %> 2020. All Rights Reserved.</p>
+      </div>
+      <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">
+            <a href="https://twitter.com/ego_tter" target="_blank">
+              <i class="fab fa-twitter-square fa-2x fa-fw"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
