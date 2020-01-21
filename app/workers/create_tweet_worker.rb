@@ -4,15 +4,19 @@ class CreateTweetWorker
 
   def perform(scheduled_tweet_id, options = {})
     tweet = ScheduledTweet.find(scheduled_tweet_id)
+    return if tweet.published?
+
     user = tweet.user
     client = user.api_client
 
     if tweet.images.any?
       tweet.images[0].open do |file|
-        client.update_with_media(tweet.text, file)
+        status = client.update_with_media(tweet.text, file)
+        tweet.update(tweet_id: status.id, published_at: Time.zone.now)
       end
     else
-      client.update(tweet.text)
+      status = client.update(tweet.text)
+      tweet.update(tweet_id: status.id, published_at: Time.zone.now)
     end
   end
 end

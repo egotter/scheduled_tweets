@@ -7,7 +7,7 @@
       <div class="mb-2">
         <span class="name"><%= user.name %></span>
         <span class="screen-name">@<%= user.screen_name %></span>
-        <span class="published-at">&sdot;<%= tweet.persisted? ? tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M") : time_ago_in_words(tweet.time.in_time_zone('Tokyo')) %></span>
+        <span class="published-at">&sdot;<%= tweet.persisted? ? tweet.publish_time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M") : time_ago_in_words(tweet.time.in_time_zone('Tokyo')) %></span>
       </div>
       <p class="tweet-preview"><%= tweet.text %></p>
 

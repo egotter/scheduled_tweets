@@ -222,3 +222,29 @@ class AttributeLabels {
 }
 
 window.AttributeLabels = AttributeLabels;
+
+window.destroyScheduledTweet = function (id, done, failed) {
+  var url = '/api/v1/scheduled_tweets/'; // api_v1_scheduled_tweet_path(id: 'ID')
+  $.ajax({
+    url: url + id,
+    type: 'POST',
+    data: {'_method': 'DELETE'}
+  }).done(done).fail(failed);
+};
+
+class SnackMessage {
+  constructor() {
+    this.options = {
+      actionText: '&times;',
+      actionTextColor: '#777',
+      pos: 'top-center'
+    };
+  }
+
+  show(message) {
+    var options = {...{text: message}, ...this.options};
+    Snackbar.show(options);
+  }
+}
+
+window.SnackMessage = SnackMessage;

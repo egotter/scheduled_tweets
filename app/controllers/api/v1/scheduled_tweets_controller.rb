@@ -10,8 +10,6 @@ class Api::V1::ScheduledTweetsController < ApiController
   end
 
   def create
-    logger.warn params.inspect
-
     if params['input-image']
       uploaded_file = UploadedFile.new(size: params['input-image'].size, content_type: params['input-image'].content_type)
       unless uploaded_file.valid?
@@ -40,7 +38,8 @@ class Api::V1::ScheduledTweetsController < ApiController
   end
 
   def destroy
-    message = I18n.t('scheduled_tweets.destroy.message')
-    render json: {message: message, record: ScheduledTweet.find(params[:id]).destroy}
+    tweet = ScheduledTweet.find(params[:id])
+    message = I18n.t('scheduled_tweets.destroy.message', time: tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M"))
+    render json: {message: message, record: tweet.destroy}
   end
 end

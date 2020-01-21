@@ -22,14 +22,18 @@
 
       <div class="clearfix"></div>
 
-      <div class="textarea-container mb-4">
-        <div class="textarea-outer">
-          <textarea id="input-text" placeholder="<%= t('.placeholder') %>"></textarea>
+      <div class="mb-4">
+        <div class="textarea-container">
+          <div class="textarea-outer">
+            <textarea id="input-text" placeholder="<%= t('.placeholder') %>"></textarea>
+          </div>
+          <div class="input-actions">
+            <span class="upload-file"><i class="far fa-image mr-3"></i></span>
+            <span class="input-emoji" style="display: none;"><i class="far fa-smile mr-3"></i></span>
+          </div>
         </div>
-        <div class="input-actions">
-          <span class="upload-file"><i class="far fa-image mr-3"></i></span>
-          <span class="input-emoji" style="display: none;"><i class="far fa-smile mr-3"></i></span>
-        </div>
+        <div class="text-muted hint mt-1"><%= t('.hints.asterisk_not_allowed') %></div>
+        <div class="text-muted hint mt-1"><%= t('.hints.content_type_html') %></div>
       </div>
 
       <%= render partial: 'form' %>
@@ -80,28 +84,28 @@
 
 <script>
   $(function () {
-    var errors = {
+    var errorMessages = {
       videoNotAllowed: '<%= t('.errors.video_not_allowed') %>',
       fileSizeTooBig: '<%= t('.errors.too_big_file') %>',
-      invalidContentType: '<%= t('.errors.invalid_content_type') %>'
+      invalidContentType: '<%= t('.errors.invalid_content_type') %>',
+      somethingError: '<%= t('.errors.something_error') %>'
+    };
+    var successMessages = {
+      created: '<%= t('.success.created') %>'
     };
     var labels = new AttributeLabels();
     var successMessage = new AlertMessage('#success-message');
     var errorMessage = new AlertMessage('#warning-message');
+    var snackMessage = new SnackMessage();
 
     new InputArea();
 
     $('#not-published-tweets .alert').on('close.bs.alert', function () {
-      var url = '<%= api_v1_scheduled_tweet_path(id: 'ID') %>';
       var id = $(this).data('scheduled-tweet-id');
-
-      $.ajax({
-        url: url.replace(/ID/, id),
-        type: 'POST',
-        data: {'_method': 'DELETE'}
-      }).done(function (res) {
+      destroyScheduledTweet(id, function done(res) {
         console.log('done', res);
-      }).fail(function (res) {
+        snackMessage.show(res['message']);
+      }, function failed(res) {
         console.log('fail', res);
       });
     });
@@ -111,7 +115,7 @@
       labels.clear();
       successMessage.hide();
       errorMessage.hide();
-      errorMessage.show(errors[type]);
+      errorMessage.show(errorMessages[type]);
     });
 
     var imagePreview = new ImagePreview();
@@ -120,7 +124,7 @@
     });
 
     new TimePicker();
-    new DatePicker({maxDate: '<%= 1.week.since.strftime("%Y/%m/%d") %>'});
+    new DatePicker({maxDate: '<%= 1.month.since.strftime("%Y/%m/%d") %>'});
 
     $('#form').on('ajax:beforeSend', function (e) {
       var response = e.detail[0];
@@ -135,6 +139,7 @@
       console.log('success', response);
 
       successMessage.show(response['message']);
+      snackMessage.show(successMessages['created']);
     });
 
     $('#form').on('ajax:error', function (e) {
@@ -146,6 +151,7 @@
         message = message.join('<%= t('.delim') %>');
       }
       errorMessage.show(message);
+      snackMessage.show(errorMessages['somethingError']);
 
       if (response['error_attributes']) {
         for (var attr of response['error_attributes']) {

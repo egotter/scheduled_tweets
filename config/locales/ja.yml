@@ -21,6 +21,12 @@ ja:
         video_not_allowed: '動画や音声は、ご自身でアップロードした後にURLをツイートに入れてください。'
         too_big_file: 'ファイルサイズが大きすぎるため、ツイートに添付することができません。（最大 15 MB）'
         invalid_content_type: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。'
+        something_error: '入力した内容にエラーがあります。'
+      hints:
+        asterisk_not_allowed: 'アスタリスク * は使用できません。'
+        content_type_html: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">仕様</a>'
+      success:
+        created: 'ツイートの予約を完了しました。'
     form:
       schedule_date: 'ツイートする日付'
       schedule_time: 'ツイートする時間'
@@ -28,7 +34,7 @@ ja:
     create:
       message: '予約したツイートは %{time} に投稿されます。'
     destroy:
-      message: '予約したツイートは取り消しされました。'
+      message: '%{time} のツイート予約は取り消されました。'
   activerecord:
     models:
     attributes:
@@ -43,6 +49,10 @@ ja:
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
+        text_invalid: 'にアスタリスク * は使用できません'
+        cannot_be_in_the_past: 'は1分以上先を指定してください'
+        cannot_be_in_the_distant_future: 'は1ヶ月以内を指定してください'
+        too_many_not_published_tweets: '一度に予約できるツイートは最大%{count}個です'
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
