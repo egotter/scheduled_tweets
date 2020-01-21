@@ -91,6 +91,21 @@
 
     new InputArea();
 
+    $('#not-published-tweets .alert').on('close.bs.alert', function () {
+      var url = '<%= api_v1_scheduled_tweet_path(id: 'ID') %>';
+      var id = $(this).data('scheduled-tweet-id');
+
+      $.ajax({
+        url: url.replace(/ID/, id),
+        type: 'POST',
+        data: {'_method': 'DELETE'}
+      }).done(function (res) {
+        console.log('done', res);
+      }).fail(function (res) {
+        console.log('fail', res);
+      });
+    });
+
     var fileUploader = new FileUploader();
     fileUploader.on('error', function (type) {
       labels.clear();

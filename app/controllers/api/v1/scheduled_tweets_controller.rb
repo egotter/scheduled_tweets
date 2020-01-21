@@ -38,4 +38,9 @@ class Api::V1::ScheduledTweetsController < ApiController
       render json: {error: tweet.errors.full_messages, error_attributes: tweet.errors.keys, record: tweet}, status: :unprocessable_entity
     end
   end
+
+  def destroy
+    message = I18n.t('scheduled_tweets.destroy.message')
+    render json: {message: message, record: ScheduledTweet.find(params[:id]).destroy}
+  end
 end

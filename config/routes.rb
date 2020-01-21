@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api, {format: 'json'} do
     namespace :v1 do
-      resources :scheduled_tweets, only: [:index, :create]
+      resources :scheduled_tweets, only: [:index, :create, :destroy]
     end
   end
 

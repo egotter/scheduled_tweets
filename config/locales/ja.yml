@@ -27,6 +27,8 @@ ja:
       create: 'ツイートを予約する'
     create:
       message: '予約したツイートは %{time} に投稿されます。'
+    destroy:
+      message: '予約したツイートは取り消しされました。'
   activerecord:
     models:
     attributes:
