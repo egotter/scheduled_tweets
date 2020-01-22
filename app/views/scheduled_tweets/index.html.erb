@@ -3,13 +3,23 @@
 <div class="mb-4"></div>
 
 <div class="container">
+  <h2 class="h4"><%= t('.how_to_use.title') %></h2>
+  <div><%= t('.how_to_use.digest') %></div>
+  <div class="text-right"><a href="#how-to-use"><%= t('.how_to_use.see') %></a></div>
+</div>
+
+<div class="mb-4"></div>
+<hr>
+<div class="mb-4"></div>
+
+<div class="container">
   <%= render partial: 'alert_message', locals: {type: 'success'} %>
   <%= render partial: 'alert_message', locals: {type: 'warning'} %>
 </div>
 
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 col-lg-6">
+    <div class="col-lg-6">
       <div>
         <div class="float-left textarea-title text-label">
           <i class="fas fa-spell-check mr-1"></i>
@@ -39,7 +49,7 @@
       <%= render partial: 'form' %>
     </div>
 
-    <div class="col-xs-12 col-lg-6">
+    <div class="col-lg-6">
       <div class="d-block d-sm-none">
         <div class="my-5"></div>
       </div>
@@ -61,25 +71,38 @@
 <div class="mb-4"></div>
 
 <div class="container">
-  <div id="not-published-tweets">
-    <div class="title"><%= t('.scheduled') %></div>
-    <% if @scheduled_tweets.not_published.any? %>
-      <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.not_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
-    <% else %>
-      <%= t('.none') %>
-    <% end %>
+  <div class="row">
+    <div class="col-lg-6">
+      <div id="not-published-tweets">
+        <div class="title"><%= t('.scheduled') %></div>
+        <% if @scheduled_tweets.not_published.any? %>
+          <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.not_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+        <% else %>
+          <%= t('.none') %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div id="published-tweets">
+        <div class="title"><%= t('.published') %></div>
+        <% if @scheduled_tweets.published.any? %>
+          <%= render(partial: 'published_tweet', collection: @scheduled_tweets.published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+        <% else %>
+          <%= t('.none') %>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 
+<div class="mb-4"></div>
+<hr>
+<div class="mb-4"></div>
+
 <div class="container">
-  <div id="published-tweets">
-    <div class="title"><%= t('.published') %></div>
-    <% if @scheduled_tweets.published.any? %>
-      <%= render(partial: 'published_tweet', collection: @scheduled_tweets.published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
-    <% else %>
-      <%= t('.none') %>
-    <% end %>
-  </div>
+  <h2 id="how-to-use" class="h3 mb-4"><%= t('.how_to_use.long_title') %></h2>
+  <%= render partial: 'how_to_use' %>
 </div>
 
 <script>

@@ -1,23 +1,37 @@
 <blockquote class="twitter-tweet pt-3">
   <div class="media">
     <div class="mr-3">
-      <img src="<%= user.profile_image_url ? user.profile_image_url : image_path('/image_48x48.png') %>" class="rounded-circle" alt="...">
+      <img src="<%= user.profile_image_url ? user.profile_image_url : image_path('/image_48x48.jpg') %>" class="rounded-circle" alt="...">
     </div>
     <div class="media-body">
       <div class="mb-2">
-        <span class="name"><%= user.name %></span>
-        <span class="screen-name">@<%= user.screen_name %></span>
-        <span class="published-at">&sdot;<%= tweet.persisted? ? tweet.publish_time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M") : time_ago_in_words(tweet.time.in_time_zone('Tokyo')) %></span>
+        <%= link_to "https://twitter.com/#{user.screen_name}", target: '_blank' do %>
+          <span class="name"><%= user.name %></span>
+          <span class="screen-name">@<%= user.screen_name %></span>
+        <% end %>
+        <span class="published-at">
+          &sdot;
+          <% if tweet.persisted? %>
+            <% text = tweet.publish_time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M") %>
+            <% if tweet.published? %>
+              <%= link_to text, "https://twitter.com/#{user.screen_name}/status/#{tweet.tweet_id}", target: '_blank' %>
+            <% else %>
+              <%= text %>
+            <% end %>
+          <% else %>
+            <%= time_ago_in_words(tweet.time.in_time_zone('Tokyo')) %>
+          <% end %>
+        </span>
       </div>
       <p class="tweet-preview"><%= tweet.text %></p>
 
       <% if tweet.persisted? && tweet.images.any? %>
         <div class="preview-image-container">
-          <%= image_tag tweet.images[0], class: 'preview-image' %>
+          <%= image_tag tweet.images[0], class: 'preview-image mb-3' %>
         </div>
       <% else %>
         <div style="display: none;" class="preview-image-container alert alert-light alert-dismissible fade show" role="alert">
-          <img class="preview-image">
+          <img class="preview-image mb-3">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

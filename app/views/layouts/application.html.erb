@@ -6,7 +6,7 @@
   <meta charset='utf-8'>
   <meta content='IE=edge' http-equiv='X-UA-Compatible'>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
+  <meta name="description" content="<%= t('scheduled_tweets.index.how_to_use.digest') %>">
   <meta name="author" content="">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
@@ -34,7 +34,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-light bg-light static-top">
   <div class="container">
-    <a class="navbar-brand" href="#"><%= t('.brand_title') %></a>
+    <h1><a class="navbar-brand" href="#"><%= t('.brand_title') %></a></h1>
     <% if user_signed_in? %>
       @<%= current_user.screen_name %>
     <% else %>

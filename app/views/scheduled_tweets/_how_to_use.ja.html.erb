@@ -1,0 +1,78 @@
+<div class="mb-5"><%= t('scheduled_tweets.index.how_to_use.digest') %></div>
+
+<div class="row mb-5">
+  <div class="col-lg-6 how-to-use-text">
+    <h3 class="h4">1. ツイートのテキストを入力する</h3>
+    <p>
+      赤い枠の部分にツイートしたいテキストを入力してください。日本語では140文字、英語では280文字まで入力することができます。<br>
+      <br>
+      画像ファイルを添付することもできます。
+      添付できるファイルは、JPG、PNG、GIF形式です。動画や音声を添付したい場合は、ご自身でアップロードした後にURLをご入力ください。
+      一度に予約できるツイート数は最大で30個です。
+    </p>
+  </div>
+  <div class="col-lg-6"><img style="width: 100%; border: 1px solid #ccc;" src="<%= image_path '/how_to_use/screenshot_input_text.png' %>"></div>
+</div>
+
+<div class="row mb-5">
+  <div class="col-lg-6 how-to-use-text">
+    <h3 class="h4">2. 入力したテキストを確認する</h3>
+    <p>
+      手順1でツイートしたいテキストを入力すると「プレビュー」に実際のツイートに近い形でツイート内容が表示されます。
+      この内容を参考に入力するテキストを調整してください。<br>
+      <br>
+      できるだけ実際のツイートに近い形で表示していますが、完全に同じではない点にご注意ください。
+      より正確な表示確認をしたい場合は、ツイッターの実際の入力欄に試しに入力してみることをおすすめします。
+    </p>
+  </div>
+  <div class="col-lg-6"><img style="width: 100%; border: 1px solid #ccc;" src="<%= image_path '/how_to_use/screenshot_preview_area.png' %>"></div>
+</div>
+
+<div class="row mb-5">
+  <div class="col-lg-6 how-to-use-text">
+    <h3 class="h4">3. 予約する日付と時間を入力する</h3>
+    <p>
+      「ツイートする日付」ではツイートを予約投稿する日付をカレンダーから選択することができます。自分で入力する際は「yyyy/mm/dd」または「yyyy-mm-dd」形式で入力してください。
+      約1ヶ月先の日付まで入力できます。<br>
+      <br>
+      「ツイートする時間」にはツイートを予約投稿する時間を一覧から選択して入力してください。自分で入力する際は「hh:mm」形式で入力してください。
+    </p>
+  </div>
+  <div class="col-lg-6"><img style="width: 100%; border: 1px solid #ccc;" src="<%= image_path '/how_to_use/screenshot_datetime.png' %>"></div>
+</div>
+
+  <div class="row mb-5">
+    <div class="col-lg-6 how-to-use-text">
+      <h3 class="h4">4. ツイートの予約を完了する</h3>
+      <p>
+        ツイートのテキストの入力、画像の添付、日時の指定が終わったら、緑色の「「ツイートを予約する」ボタンを押してください。<br>
+        <br>
+        入力した内容に誤りがある場合は、エラーメッセージが表示されます。表示されたメッセージに従い、エラーを修正後、再度「ツイートを予約する」ボタンを押してください。
+      </p>
+    </div>
+    <div class="col-lg-6"><img style="width: 100%; border: 1px solid #ccc;" src="<%= image_path '/how_to_use/screenshot_submit_button.png' %>"></div>
+</div>
+
+<div class="row mb-5">
+  <div class="col-lg-6 how-to-use-text">
+    <h3 class="h4">4. 予約済みのツイートを確認する</h3>
+    <p>
+      これから投稿される予定のツイートが一覧で表示されています。右上のばつ印を押せば予約を取り消すことができます。
+      <br>
+      入力した内容に誤りがある場合は、エラーメッセージが表示されます。表示されたメッセージに従い、エラーを修正後、再度「ツイートを予約する」ボタンを押してください。
+    </p>
+  </div>
+  <div class="col-lg-6"><img style="width: 100%; border: 1px solid #ccc;" src="<%= image_path '/how_to_use/screenshot_submit_button.png' %>"></div>
+</div>
+
+<div class="row mb-5">
+  <div class="col-lg-6 how-to-use-text">
+    <h3 class="h4">4. 投稿済みのツイートを確認する</h3>
+    <p>
+      既に投稿されたツイートが一覧で表示されています。
+      <br>
+      入力した内容に誤りがある場合は、エラーメッセージが表示されます。表示されたメッセージに従い、エラーを修正後、再度「ツイートを予約する」ボタンを押してください。
+    </p>
+  </div>
+  <div class="col-lg-6"><img style="width: 100%; border: 1px solid #ccc;" src="<%= image_path '/how_to_use/screenshot_submit_button.png' %>"></div>
+</div>

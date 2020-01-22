@@ -2,11 +2,11 @@ ja:
   layouts:
     application:
       brand_title: 'ツイート予約投稿'
+      sign_in: 'ログイン'
       terms_of_use: '利用規約'
       privacy_policy: 'プライバシーポリシー'
   scheduled_tweets:
     index:
-      sign_in: 'ログイン'
       tweet: '予約するツイート'
       preview: 'プレビュー'
       placeholder: 'テキストやリンクをここに入力してください。'
@@ -16,7 +16,7 @@ ja:
       delim: '、'
       scheduled: '予約済みのツイート'
       published: '投稿済みのツイート'
-      none: 'なし'
+      none: 'まだありません'
       errors:
         video_not_allowed: '動画や音声は、ご自身でアップロードした後にURLをツイートに入れてください。'
         too_big_file: 'ファイルサイズが大きすぎるため、ツイートに添付することができません。（最大 15 MB）'
@@ -27,6 +27,11 @@ ja:
         content_type_html: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">仕様</a>'
       success:
         created: 'ツイートの予約を完了しました。'
+      how_to_use:
+        title: '使い方'
+        long_title: '「ツイート予約投稿」の使い方'
+        digest: '「ツイート予約投稿」ではツイートを時間指定で投稿することができます。「予約するツイート」にツイートしたいテキストを入力し、「ツイートを予約する」ボタンを押してください。画像を添付することもできます。'
+        see: '使い方をもっと見る'
     form:
       schedule_date: 'ツイートする日付'
       schedule_time: 'ツイートする時間'

@@ -1,3 +1,7 @@
+h1 {
+  line-height: 24px;
+}
+
 textarea {
   border: none;
   outline: none;
@@ -47,6 +51,10 @@ blockquote.twitter-tweet {
     font-weight: bold;
     font-size: 14px;
     //color: #5d6366;
+
+    a {
+      font-weight: bold;
+    }
   }
 
   .screen-name,
@@ -120,7 +128,7 @@ blockquote.twitter-tweet {
 
 #not-published-tweets,
 #published-tweets {
-  max-width: 540px;
+  //max-width: 540px;
 
   .alert {
     margin: 0;
