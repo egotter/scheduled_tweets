@@ -75,7 +75,7 @@ class ScheduledTweet < ApplicationRecord
   end
 
   def specified_datetime_in_the_distant_future?
-    specified_datetime > 1.month.since
+    specified_datetime > 2.weeks.since
   end
 
   def published?

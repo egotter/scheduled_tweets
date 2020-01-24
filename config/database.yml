@@ -51,5 +51,3 @@ test:
 production:
   <<: *default
   database: scheduled_tweets_production
-  username: scheduled_tweets
-  password: <%= ENV['DATABASE_PASSWORD'] %>

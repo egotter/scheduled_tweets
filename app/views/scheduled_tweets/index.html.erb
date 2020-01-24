@@ -147,7 +147,7 @@
     });
 
     new TimePicker();
-    new DatePicker({maxDate: '<%= 1.month.since.strftime("%Y/%m/%d") %>'});
+    new DatePicker({maxDate: '<%= 2.weeks.since.strftime("%Y/%m/%d") %>'});
 
     $('#form').on('ajax:beforeSend', function (e) {
       var response = e.detail[0];

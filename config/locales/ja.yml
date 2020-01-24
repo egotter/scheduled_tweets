@@ -56,7 +56,7 @@ ja:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
         text_invalid: 'にアスタリスク * は使用できません'
         cannot_be_in_the_past: 'は1分以上先を指定してください'
-        cannot_be_in_the_distant_future: 'は1ヶ月以内を指定してください'
+        cannot_be_in_the_distant_future: 'は2週間以内を指定してください'
         too_many_not_published_tweets: '一度に予約できるツイートは最大%{count}個です'
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
