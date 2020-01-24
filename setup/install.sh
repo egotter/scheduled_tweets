@@ -65,4 +65,4 @@ yarn install --check-files
 RAILS_ENV=production bundle exec rails db:create db:migrate assets:precompile
 
 bundle exec rails s -e production
-
+# RAILS_ENV=production bundle exec pumactl start

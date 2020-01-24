@@ -24,6 +24,9 @@ class User < ApplicationRecord
     end
   end
 
+  def remember_created_at=(*args)
+  end
+
   def api_client
     ApiClient.new(self)
   end
