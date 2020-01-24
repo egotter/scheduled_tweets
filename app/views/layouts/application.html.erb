@@ -44,8 +44,13 @@
 </nav>
 
 <% if notice %>
-  <div class="container">
-    <p class="notice"><%= notice %></p>
+  <div class="container mt-4">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%= notice %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
   </div>
 <% end %>
 <% if alert %>
@@ -69,6 +74,14 @@
           <li class="list-inline-item">&sdot;</li>
           <li class="list-inline-item">
             <a href="https://egotter.com/privacy_policy" target="_blank"><%= t('.privacy_policy') %></a>
+          </li>
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <% if user_signed_in? %>
+              <%= link_to t('.sign_out'), destroy_user_session_path, method: :delete %>
+            <% else %>
+              <%= link_to t('.sign_in'), user_twitter_omniauth_authorize_path %>
+            <% end %>
           </li>
         </ul>
         <p class="text-muted small mb-4 mb-lg-0">&copy; <%= t('.brand_title') %> 2020. All Rights Reserved.</p>

@@ -3,6 +3,7 @@ ja:
     application:
       brand_title: 'ツイート予約投稿'
       sign_in: 'ログイン'
+      sign_out: 'ログアウト'
       terms_of_use: '利用規約'
       privacy_policy: 'プライバシーポリシー'
   scheduled_tweets:
