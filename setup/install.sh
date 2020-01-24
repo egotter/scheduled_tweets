@@ -66,3 +66,6 @@ RAILS_ENV=production bundle exec rails db:create db:migrate assets:precompile
 
 bundle exec rails s -e production
 # RAILS_ENV=production bundle exec pumactl start
+
+cp ./setup/sidekiq.systemd.service /usr/lib/systemd/system/sidekiq.service
+# systemctl start sidekiq
