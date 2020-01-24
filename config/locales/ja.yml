@@ -6,6 +6,7 @@ ja:
       sign_out: 'ログアウト'
       terms_of_use: '利用規約'
       privacy_policy: 'プライバシーポリシー'
+      back_to_egotter: 'えごったーに戻る'
   scheduled_tweets:
     index:
       tweet: '予約するツイート'
