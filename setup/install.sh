@@ -20,7 +20,7 @@ gpgcheck=0
 enabled=1
 EOS
 yum install -y nginx
-cp ./setup/nginx.conf /etc/nginx/conf.d/scheduled_tweets.conf
+cp ./setup/scheduled_tweets.nginx.conf /etc/nginx/conf.d/scheduled_tweets.conf
 # systemctl start nginx
 
 yum groupinstall -y "Development Tools"
