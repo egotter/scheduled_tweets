@@ -6,6 +6,9 @@
   <h2 class="h4"><%= t('.how_to_use.title') %></h2>
   <div><%= t('.how_to_use.digest') %></div>
   <div class="text-right"><a href="#how-to-use"><%= t('.how_to_use.see') %></a></div>
+
+  <h2 class="h4"><%= t('.support.title') %></h2>
+  <div><%= t('.support.text_html') %></div>
 </div>
 
 <div class="mb-4"></div>
@@ -104,6 +107,12 @@
   <h2 id="how-to-use" class="h3 mb-4"><%= t('.how_to_use.long_title') %></h2>
   <%= render partial: 'how_to_use' %>
 </div>
+
+<div class="container">
+  <h2 class="h3 mb-4"><%= t('.support.title') %></h2>
+  <div><%= t('.support.text_html') %></div>
+</div>
+<div class="mb-4"></div>
 
 <script>
   $(function () {
