@@ -34,7 +34,9 @@ class Api::V1::ScheduledTweetsController < ApiController
       message = I18n.t('scheduled_tweets.create.message', time: tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M"))
       render json: {message: message, record: tweet}
     else
-      render json: {error: tweet.errors.full_messages, error_attributes: tweet.errors.keys, record: tweet}, status: :unprocessable_entity
+      response = {error: tweet.errors.full_messages, error_attributes: tweet.errors.keys, record: tweet}
+      logger.warn "tweet.save failed #{response.inspect}"
+      render json: response, status: :unprocessable_entity
     end
   end
 
