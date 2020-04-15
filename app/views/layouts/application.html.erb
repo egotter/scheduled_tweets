@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <title><%= t('.brand_title') %></title>
+  <title><%= content_for?(:title) ? yield(:title) : "ScheduledTweets" %></title>
+  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Description" %>">
   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
   <meta charset='utf-8'>
   <meta content='IE=edge' http-equiv='X-UA-Compatible'>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="<%= t('scheduled_tweets.index.how_to_use.digest') %>">
-  <meta name="author" content="">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
@@ -25,6 +24,7 @@
 
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_pack_tag 'application' %>
+  <%= javascript_pack_tag 'global' %>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"/>
 
@@ -41,80 +41,61 @@
 
 <body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-light bg-light static-top">
+<nav class="navbar navbar-dark fixed-top" style="padding: 10px;">
   <div class="container">
-    <h1><a class="navbar-brand" href="#"><%= t('.brand_title') %></a></h1>
-    <% if user_signed_in? %>
-      @<%= current_user.screen_name %>
-    <% else %>
-      <a class="btn btn-primary" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a>
-    <% end %>
+    <a class="navbar-brand text-white" href="<%= root_path %>"><%= t('.brand_title') %></a>
+    <ul class="nav">
+      <% if user_signed_in? %>
+        <li class="nav-item"><a class="nav-link text-white" href="#"><%= '@' + current_user.screen_name %></a></li>
+      <% else %>
+        <li class="nav-item"><a class="nav-link text-white" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a></li>
+        <li class="nav-item"><a class="nav-link btn btn-primary text-white" href="#create_request"><%= t('.free_trial') %></a></li>
+      <% end %>
+    </ul>
   </div>
 </nav>
 
 <% if notice %>
-  <div class="container mt-4">
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <%= notice %>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  </div>
+  <script>
+    SnackMessage.show('<div class="text-primary"><%= notice %><div>');
+  </script>
 <% end %>
 <% if alert %>
-  <div class="container mt-4">
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      <%= alert %>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  </div>
+  <script>
+    SnackMessage.show('<div class="text-danger"><%= alert %><div>');
+  </script>
 <% end %>
 
 <%= yield %>
 
-<!-- Footer -->
-<footer class="footer bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="https://egotter.com?via=scheduled_tweets" target="_blank"><%= t('.back_to_egotter') %></a>
-          </li>
-          <li class="list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="https://egotter.com/terms_of_service" target="_blank"><%= t('.terms_of_use') %></a>
-          </li>
-          <li class="list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="https://egotter.com/privacy_policy" target="_blank"><%= t('.privacy_policy') %></a>
-          </li>
-          <li class="list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <% if user_signed_in? %>
-              <%= link_to t('.sign_out'), destroy_user_session_path, method: :delete %>
-            <% else %>
-              <%= link_to t('.sign_in'), user_twitter_omniauth_authorize_path %>
-            <% end %>
-          </li>
-        </ul>
-        <p class="text-muted small mb-4 mb-lg-0">&copy; <%= t('.brand_title') %> 2020. All Rights Reserved.</p>
-      </div>
-      <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
-        <ul class="list-inline mb-0">
-          <li class="list-inline-item">
-            <a href="https://twitter.com/ego_tter" target="_blank">
-              <i class="fab fa-twitter-square fa-2x fa-fw"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+<footer class="footer py-5">
+  <div class="container text-center">
+    <ul class="list-inline mb-4">
+      <li class="list-inline-item">
+        <a href="https://egotter.com?via=scheduled_tweets" target="_blank"><%= t('.back_to_egotter') %></a>
+      </li>
+      <li class="list-inline-item">&sdot;</li>
+      <li class="list-inline-item">
+        <a href="https://egotter.com/terms_of_service" target="_blank"><%= t('.terms_of_use') %></a>
+      </li>
+      <li class="list-inline-item">&sdot;</li>
+      <li class="list-inline-item">
+        <a href="https://egotter.com/privacy_policy" target="_blank"><%= t('.privacy_policy') %></a>
+      </li>
+      <li class="list-inline-item">&sdot;</li>
+      <li class="list-inline-item">
+        <a href="https://twitter.com/ego_tter" target="_blank">Twitter</a>
+      </li>
+      <li class="list-inline-item">&sdot;</li>
+      <li class="list-inline-item">
+        <% if user_signed_in? %>
+          <%= link_to t('.sign_out'), destroy_user_session_path, method: :delete %>
+        <% else %>
+          <%= link_to t('.sign_in'), user_twitter_omniauth_authorize_path %>
+        <% end %>
+      </li>
+    </ul>
+    <div class="text-muted">&copy; <%= t('.brand_title') %> 2020. All Rights Reserved.</div>
   </div>
 </footer>
 
