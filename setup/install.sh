@@ -4,6 +4,7 @@ yum update -y
 rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
 yum remove -y mariadb-libs
 yum install -y mysql-community-server mysql-community-devel
+# chown mysql:mysql /var/lib/mysql
 sudo mysqld --initialize-insecure
 sudo mysql_secure_installation
 # systemctl start mysqld
@@ -24,7 +25,7 @@ cp ./setup/scheduled_tweets.nginx.conf /etc/nginx/conf.d/scheduled_tweets.conf
 # systemctl start nginx
 
 yum groupinstall -y "Development Tools"
-yum install -y git tmux dstat htop monit tree nginx
+yum install -y wget git tmux dstat htop monit tree
 yum install -y openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel
 
 # Install ruby2.7.0
