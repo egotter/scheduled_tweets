@@ -30,7 +30,7 @@ class Api::V1::ScheduledTweetsController < ApiController
         tweet.images.attach(params['input-image'])
       end
 
-      CreateTweetWorker.perform_at(tweet.time, tweet.id)
+      CreateTweetWorker.perform_at(tweet.time, tweet.id, user_id: current_user.id, text: tweet.text)
       message = I18n.t('scheduled_tweets.create.message', time: tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M"))
       render json: {message: message, record: tweet}
     else
