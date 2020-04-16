@@ -49,7 +49,7 @@
         <li class="nav-item"><a class="nav-link text-white" href="#"><%= '@' + current_user.screen_name %></a></li>
       <% else %>
         <li class="nav-item"><a class="nav-link text-white" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a></li>
-        <li class="nav-item"><a class="nav-link btn btn-primary text-white" href="#create_request"><%= t('.free_trial') %></a></li>
+        <li class="nav-item"><a class="nav-link btn btn-primary text-white" href="#schedule-tweet"><%= t('.free_trial') %></a></li>
       <% end %>
     </ul>
   </div>
