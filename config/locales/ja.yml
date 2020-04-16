@@ -20,30 +20,32 @@ ja:
         see_how_to_use: '使い方をもっと見る'
       create:
         title: 'ツイート予約投稿を無料で試す'
-        desc: 'TODO 説明'
+        desc: |
+          予約するツイートのテキスト、ツイートする日付、ツイートする時間を入力することで、ツイートの投稿を予約することができます。画像を添付することもできます。
+          入力した予約内容は、実際に投稿されるデザインで確認することができます。
       scheduled:
         title: '予約済みのツイート'
-        desc: 'TODO 説明'
+        desc: 'これまでに予約したツイートの一覧を表示しています。左側は、予約が済んでおりまだ投稿していないツイート、右側は、既に投稿済みのツイートです。'
         scheduled: '予約済みのツイート'
         published: '投稿済みのツイート'
-      tweet: '予約するツイート'
       preview: 'プレビュー'
-      placeholder: 'テキストやリンクをここに入力してください。'
       name: 'さいころ'
       screen_name: 'ts_3156'
       created_at: '・Just now'
       delim: '、'
       none: 'まだありません'
       errors:
+        need_sign_in: 'ツイート予約投稿を利用するにはログインが必要です。'
         video_not_allowed: '動画や音声は、ご自身でアップロードした後にURLをツイートに入れてください。'
         too_big_file: 'ファイルサイズが大きすぎるため、ツイートに添付することができません。（最大 15 MB）'
         invalid_content_type: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。'
         something_error: '入力した内容にエラーがあります。'
-      hints:
-        asterisk_not_allowed: 'アスタリスク * は使用できません。'
-        content_type_html: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">仕様</a>'
-      success:
-        created: 'ツイートの予約を完了しました。'
+        text:
+          blank: 'ツイートのテキストを入力してください。'
+        date:
+          blank: 'ツイートを投稿する日付を入力してください。'
+        time:
+          blank: 'ツイートを投稿する時間を入力してください。'
       support:
         title: 'お問い合わせ'
         text_html: '「ツイート予約投稿」への要望、質問は、<a href="https://twitter.com/ego_tter" target="_blank">@ego_tter</a> までお気軽にご連絡ください。たくさんのツイートを予約したい方については、特別なサポートも提供しています。'
@@ -95,6 +97,11 @@ ja:
           - /how_to_use/screenshot_tweets_list.png
           - /how_to_use/screenshot_cancel_tweet.png
     form:
+      tweet: '予約するツイート'
+      placeholder: 'テキストやリンクをここに入力してください。'
+      hints:
+        asterisk_not_allowed: 'アスタリスク * は使用できません。'
+        content_type_html: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">仕様</a>'
       schedule_date: 'ツイートする日付'
       schedule_time: 'ツイートする時間'
       create: 'ツイートを予約する'

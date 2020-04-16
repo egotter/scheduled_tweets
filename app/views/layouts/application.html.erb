@@ -57,12 +57,12 @@
 
 <% if notice %>
   <script>
-    SnackMessage.show('<div class="text-primary"><%= notice %><div>');
+    SnackMessage.success('<%= notice %>');
   </script>
 <% end %>
 <% if alert %>
   <script>
-    SnackMessage.show('<div class="text-danger"><%= alert %><div>');
+    SnackMessage.alert('<%= alert %>');
   </script>
 <% end %>
 

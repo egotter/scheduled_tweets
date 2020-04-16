@@ -1,36 +1,5 @@
-class InputArea {
-  constructor() {
-    var $el = $('#input-text');
-    var self = this;
-    this.remainingMax = 280;
-
-    $el.autosize();
-
-    $el.on('keyup', function () {
-      var $preview = $('#live-preview .tweet-preview');
-
-      var previous = $el.data('previous');
-      var current = $el.val();
-
-      if (previous !== current) {
-        console.log('input', current);
-        self.setRemainingCount(self.remainingMax - self.countChars(current));
-
-        var str = self.escapeTags(current).replace(/(?:\r\n|\r|\n)/g, '<br>');
-        console.log('converted', str);
-
-        $preview.html(str);
-        $el.data('previous', current);
-        $('.tweet-text')[0].value = current;
-      }
-    });
-  }
-
-  setRemainingCount(count) {
-    $('.remaining-count').text(count);
-  }
-
-  escapeTags(text) {
+class Util {
+  static escapeTags(text) {
     var chars = {
       '&': '&amp;',
       '<': '&lt;',
@@ -44,7 +13,7 @@ class InputArea {
     return text.replace(/[&<>]/g, replace);
   }
 
-  countChars(str) {
+  static countChars(str) {
     var len = 0;
     str = str.split("");
 
@@ -62,21 +31,23 @@ class InputArea {
 
     return len;
   }
+
+  static daysSince(count) {
+    var d = new Date();
+    d.setDate(d.getDate() + (count - 1));
+    return d;
+  }
 }
 
-window.InputArea = InputArea;
-
 class DatePicker {
-  constructor({maxDate = null} = {}) {
+  constructor() {
     flatpickr('#date-picker', {
       minDate: 'today',
-      maxDate: maxDate,
+      maxDate: Util.daysSince(14),
       allowInput: true
     });
   }
 }
-
-window.DatePicker = DatePicker;
 
 class TimePicker {
   constructor() {
@@ -88,8 +59,6 @@ class TimePicker {
     });
   }
 }
-
-window.TimePicker = TimePicker;
 
 class ImagePreview {
   constructor() {
@@ -114,20 +83,102 @@ class ImagePreview {
   }
 }
 
-window.ImagePreview = ImagePreview;
-
-class FileUploader {
+class Form {
   constructor() {
-    var $el = this.$el = $('#input-image');
+    this.$el = $('#form');
+    this.$submit = $('#submit');
+    this.fields = [
+      new TextField(),
+      new DateField(),
+      new TimeField(),
+    ];
+
+    var fileField = new FileField();
+    var imagePreview = new ImagePreview();
+    imagePreview.on('close', function () {
+      fileField.clear();
+    });
+
     var self = this;
-    this.error_callback = null;
+    this.$el.on('ajax:beforeSend', function (e) { // After click
+      if (self.validate()) {
+        return true;
+      } else {
+        e.preventDefault();
+        e.stopPropagation();
+
+        self.fields.forEach(function (field) {
+          if (field.errors.length !== 0) {
+            console.warn(field, field.errors);
+            field.displayErrors();
+          }
+        });
+        return false;
+      }
+    });
+
+    this.$el.on('ajax:success', function (e) {
+      var response = e.detail[0];
+      console.log('success', response);
+      SnackMessage.success(response['message']);
+    });
+
+    this.$el.on('ajax:error', function (e) {
+      var response = e.detail[0];
+      console.log('error', response);
+
+      var message = response['error'];
+      if (Array.isArray(message)) {
+        message = message.join(I18n.delim);
+      }
+      SnackMessage.alert(message);
+    });
+  }
+
+  validate() {
+    console.log('Start form validation');
+    var results = [];
+    this.fields.forEach(function (field) {
+      results.push(field.validate());
+    });
+    return results.every(r => r);
+  }
+}
+
+window.Form = Form;
+
+class Field {
+  constructor() {
+  }
+
+  displayErrors() {
+    if (this.errors.length === 0) {
+      this.$errors_container.empty().hide();
+    } else {
+      var $ul = $('<ul>');
+      this.errors.forEach(function (error) {
+        var $er = $('<li>', {text: error});
+        $ul.append($er);
+      });
+      this.$errors_container.append($ul).show();
+    }
+  }
+}
+
+class FileField extends Field {
+  constructor() {
+    super();
+    var $el = this.$el = $('#input-image');
+    this.$errors_container = $('#form_images_errors');
+    this.errors = [];
 
     $('.upload-file').on('click', function () {
       $el.trigger('click');
     });
 
+    var self = this;
     $el.change(function () {
-      self.readURL(this);
+      self.readFile(this.files);
     });
   }
 
@@ -135,99 +186,149 @@ class FileUploader {
     this.$el[0].value = '';
   }
 
-  readURL(input) {
-    if (input.files && input.files[0]) {
-      var file = input.files[0];
+  readFile(files) {
+    // TODO Support multiple files
 
-      if (file.type.match(/video|audio/i)) {
-        if (this.error_callback) {
-          this.error_callback('videoNotAllowed');
-        }
-        return;
+    if (files && files[0]) {
+      var file = files[0];
+
+      if (this.validate(file)) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          $('#live-preview .preview-image').attr('src', e.target.result);
+          $('#live-preview .preview-image-container').show();
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        this.displayErrors();
       }
-
-      if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
-        if (this.error_callback) {
-          this.error_callback('invalidContentType');
-        }
-        return;
-      }
-
-      if (file.size > 15000000) { // 15 MB
-        if (this.error_callback) {
-          this.error_callback('fileSizeTooBig');
-        }
-        return;
-      }
-
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        $('#live-preview .preview-image').attr('src', e.target.result);
-        $('#live-preview .preview-image-container').show();
-      };
-
-      reader.readAsDataURL(file);
     }
   }
 
-  on(type, fn) {
-    if (type === 'error') {
-      this.error_callback = fn;
+  validate(file) {
+    this.errors = [];
+    this.$errors_container.empty().hide();
+    console.log('Start validation', file);
+
+    if (file.type.match(/video|audio/i)) {
+      this.errors.push(I18n.errors['videoNotAllowed']);
+      return;
     }
+
+    if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+      this.errors.push(I18n.errors['invalidContentType']);
+      return;
+    }
+
+    if (file.size > 15000000) { // 15 MB
+      this.errors.push(I18n.errors['fileSizeTooBig']);
+    }
+
+    return this.errors.length === 0;
   }
 }
 
-window.FileUploader = FileUploader;
+class TextField extends Field {
+  constructor() {
+    super();
+    this.$el = $('#input-text');
+    this.$errors_container = $('#form_text_errors');
+    this.errors = [];
+    this.remainingMax = 280;
 
-class AlertMessage {
-  constructor(selector) {
-    var $el = this.$el = $(selector);
-    $el.on('close.bs.alert', function (e) {
-      $el.parent().hide();
-      return false;
+    this.$el.autosize();
+
+    var self = this;
+    this.$el.on('keyup', function () {
+      self.displayPreview();
     });
   }
 
-  show(message) {
-    console.log('show', message);
-    this.$el.find('.message').text(message);
-    this.$el.parent().show();
-  }
+  displayPreview() {
+    var previous = this.$el.data('previous');
+    var current = this.$el.val();
 
-  hide() {
-    this.$el.find('.message').text('');
-    this.$el.parent().hide();
-  }
-}
+    if (previous !== current) {
+      console.log('input', current);
+      this.setRemainingCount(this.remainingMax - Util.countChars(current));
 
-window.AlertMessage = AlertMessage;
+      var str = Util.escapeTags(current).replace(/(?:\r\n|\r|\n)/g, '<br>');
+      console.log('converted', str);
 
-class AttributeLabels {
-  constructor() {
-    this.labels = [
-      $('.text-label'),
-      $('.specified_date-label'),
-      $('.specified_time-label')
-    ];
-
-    this.color = this.labels[0].css('color');
-  }
-
-  clear() {
-    for (var $label of this.labels) {
-      $label.css('color', this.color);
+      $('#live-preview .tweet-preview').html(str);
+      this.$el.data('previous', current);
+      $('.tweet-text')[0].value = current;
     }
   }
+
+  setRemainingCount(count) {
+    $('.remaining-count').text(count);
+  }
+
+  validate() {
+    this.errors = [];
+    this.$errors_container.empty().hide();
+    var val = this.$el.val();
+    console.log('Start validation', val);
+
+    if (!val || val === '') {
+      this.errors.push(I18n.errors.text.blank);
+      return;
+    }
+
+    return this.errors.length === 0;
+  }
 }
 
-window.AttributeLabels = AttributeLabels;
 
-window.destroyScheduledTweet = function (id, done, failed) {
-  var url = '/api/v1/scheduled_tweets/'; // api_v1_scheduled_tweet_path(id: 'ID')
-  $.ajax({
-    url: url + id,
-    type: 'POST',
-    data: {'_method': 'DELETE'}
-  }).done(done).fail(failed);
-};
+class DateField extends Field {
+  constructor() {
+    super();
+    this.$el = $('#date-picker');
+    this.$errors_container = $('#form_date_errors');
+    this.errors = [];
+
+    new DatePicker();
+  }
+
+  validate() {
+    this.errors = [];
+    this.$errors_container.empty().hide();
+    var val = this.$el.val();
+    console.log('Start validation', val);
+
+    if (!val || val === '') {
+      this.errors.push(I18n.errors.date.blank);
+      return;
+    }
+
+    return this.errors.length === 0;
+  }
+}
+
+class TimeField extends Field {
+  constructor() {
+    super();
+    this.$el = $('#time-picker');
+    this.$errors_container = $('#form_time_errors');
+    this.errors = [];
+
+    new TimePicker();
+  }
+
+  validate() {
+    this.errors = [];
+    this.$errors_container.empty().hide();
+    var val = this.$el.val();
+    console.log('Start validation', val);
+
+    if (!val || val === '') {
+      this.errors.push(I18n.errors.time.blank);
+      return;
+    }
+
+    return this.errors.length === 0;
+  }
+}

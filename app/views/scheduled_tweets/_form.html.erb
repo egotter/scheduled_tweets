@@ -1,22 +1,51 @@
 <%= form_tag api_v1_scheduled_tweets_path, id: 'form', method: :post, multipart: true, remote: true do %>
-  <div class="row no-gutters">
+  <div class="d-flex justify-content-between">
+    <div class="textarea-title text-label">
+      <i class="fas fa-spell-check mr-1"></i>
+      <%= t('.tweet') %>
+    </div>
+    <div class="text-right remaining-count">280</div>
+  </div>
+
+  <div id="form_text_errors" class="invalid-feedback form-text"></div>
+
+  <div class="textarea-container bg-white mb-2">
+    <div class="textarea-outer">
+      <textarea id="input-text" placeholder="<%= t('.placeholder') %>"></textarea>
+    </div>
+    <div class="input-actions">
+      <span class="upload-file"><i class="far fa-image mr-3"></i></span>
+      <span class="input-emoji" style="display: none;"><i class="far fa-smile mr-3"></i></span>
+    </div>
+  </div>
+
+  <input type="file" id="input-image" name="input-image" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;">
+  <div id="form_images_errors" class="invalid-feedback form-text"></div>
+
+  <div class="text-muted hint mt-1"><%= t('.hints.asterisk_not_allowed') %></div>
+  <div class="text-muted hint mt-1 mb-5"><%= t('.hints.content_type_html') %></div>
+
+  <div class="row no-gutters align-items-end">
     <div class="col">
       <div class="form-group mb-0">
         <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
+        <div id="form_date_errors" class="invalid-feedback form-text"></div>
         <input type="text" id="date-picker" class="form-control" name="scheduled-date" placeholder="<%= Time.zone.now.year %>/00/00">
       </div>
     </div>
+
     <div class="col">
       <div class="form-group mb-0">
         <label for="time-picker" class="specified_time-label"><%= t('.schedule_time') %></label>
+        <div id="form_time_errors" class="invalid-feedback form-text"></div>
         <input type="text" id="time-picker" class="form-control" name="scheduled-time" placeholder="00:00" data-time-format="H:i">
       </div>
     </div>
-    <div class="col" style="position: relative;">
-      <button style="position: absolute; bottom: 0;" id="submit" type="submit" class="btn btn-success"><%= t('.create') %></button>
+
+    <div class="col">
+      <button style="" id="submit" type="submit" class="btn btn-success"><%= t('.create') %></button>
     </div>
   </div>
 
   <%= hidden_field_tag :tweet_text, '', class: 'tweet-text' %>
-  <input type="file" id="input-image" name="input-image" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;">
 <% end %>

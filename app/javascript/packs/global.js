@@ -38,18 +38,30 @@ $(function () {
 });
 
 class SnackMessage {
+  static options = {
+    actionText: '&times;',
+    actionTextColor: '#777',
+    backgroundColor: '#fff',
+    pos: 'top-center',
+    customClass: 'shadow',
+    duration: 7500
+  };
+
   constructor() {
   }
 
   static show(message) {
-    var options = {
-      actionText: '&times;',
-      actionTextColor: '#777',
-      backgroundColor: '#eee',
-      pos: 'top-center',
-      duration: 7500,
-      text: message
-    };
+    var options = Object.assign({text: message}, this.options);
+    Snackbar.show(options);
+  }
+
+  static success(message) {
+    var options = Object.assign({text: '<div class="text-primary">' + message + '</div>'}, this.options);
+    Snackbar.show(options);
+  }
+
+  static alert(message) {
+    var options = Object.assign({text: '<div class="text-danger">' + message + '</div>'}, this.options);
     Snackbar.show(options);
   }
 }
