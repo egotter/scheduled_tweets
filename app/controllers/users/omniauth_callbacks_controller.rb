@@ -3,7 +3,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     user = User.update_or_create_with_token!(user_params)
     sign_in user, event: :authentication
     flash[:notice] = I18n.t('devise.omniauth_callbacks.success', kind: 'twitter')
-    redirect_to root_path(thanks: '1')
+
+    thanks = (user.created_at > 10.seconds.ago) ? 'sign_up' : 'sign_in'
+    redirect_to root_path(thanks: thanks)
   end
 
   private

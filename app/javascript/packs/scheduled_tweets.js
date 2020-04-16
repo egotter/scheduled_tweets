@@ -121,6 +121,11 @@ class Form {
       var response = e.detail[0];
       console.log('success', response);
       SnackMessage.success(response['message']);
+
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Schedule Success'
+      });
     });
 
     this.$el.on('ajax:error', function (e) {
