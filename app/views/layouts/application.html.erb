@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <title><%= content_for?(:title) ? yield(:title) : "ScheduledTweets" %></title>
-  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Description" %>">
+  <% page_title = content_for?(:title) ? yield(:title) : "ScheduledTweets" %>
+  <% page_description = content_for?(:description) ? yield(:description) : "Description" %>
+  <title><%= page_title %></title>
+  <meta name="description" content="<%= page_description %>">
+  <meta property="og:title" content="<%= page_title %>">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://scheduled-tweets.egotter.com">
+  <meta property="og:image" content="https://scheduled-tweets.egotter.com/og_image.jpg">
+  <meta property="og:site_name" content="<%= page_title %>">
+  <meta property="og:description" content="<%= page_description %>">
+  <meta property="og:locale" content="ja_JP">
   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
   <meta charset='utf-8'>
   <meta content='IE=edge' http-equiv='X-UA-Compatible'>
