@@ -5,6 +5,8 @@
   <% page_description = content_for?(:description) ? yield(:description) : "Description" %>
   <title><%= page_title %></title>
   <meta name="description" content="<%= page_description %>">
+  <meta content='summary_large_image' name='twitter:card'>
+  <meta content='@scheduletweet_' name='twitter:site'>
   <meta property="og:title" content="<%= page_title %>">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://scheduled-tweets.egotter.com">
