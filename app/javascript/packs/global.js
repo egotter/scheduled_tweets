@@ -50,11 +50,6 @@ class SnackMessage {
   constructor() {
   }
 
-  static show(message) {
-    var options = Object.assign({text: message}, this.options);
-    Snackbar.show(options);
-  }
-
   static success(message) {
     var options = Object.assign({text: '<div class="text-primary">' + message + '</div>'}, this.options);
     Snackbar.show(options);

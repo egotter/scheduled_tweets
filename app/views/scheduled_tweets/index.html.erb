@@ -147,7 +147,7 @@
       var id = $(this).data('scheduled-tweet-id');
       destroyScheduledTweet(id, function done(res) {
         console.log('done', res);
-        SnackMessage.show(res['message']);
+        SnackMessage.success(res['message']);
       }, function failed(res) {
         console.log('fail', res);
       });
