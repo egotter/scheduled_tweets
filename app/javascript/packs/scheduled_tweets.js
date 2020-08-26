@@ -21,7 +21,7 @@ class Util {
       if (str[i].match(/[ｦ-ﾟ]+/)) {
         len++;
       } else {
-        if (escape(str[i]).match(/^\%u/)) {
+        if (escape(str[i]).match(/^\\%u/)) {
           len += 2;
         } else {
           len++;
@@ -65,7 +65,7 @@ class ImagePreview {
     this.callback = null;
     var self = this;
 
-    $('#live-preview .preview-image-container').on('close.bs.alert', function (e) {
+    $('#live-preview .preview-image-container').on('close.bs.alert', function () {
       $(this).hide();
       $('#live-preview .preview-image').attr('src', null);
 

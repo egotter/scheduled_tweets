@@ -5,7 +5,10 @@
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "4.2.2"
+    "@rails/webpacker": "4.2.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.7.0",
+    "eslint-loader": "^4.0.2"
   },
   "version": "0.1.0",
   "devDependencies": {
