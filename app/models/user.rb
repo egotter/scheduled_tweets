@@ -4,6 +4,9 @@ class User < ApplicationRecord
   has_one :credential
   has_many :scheduled_tweets
 
+  validates :uid, presence: true, uniqueness: true
+  validates :screen_name, presence: true
+
   attr_accessor :name
 
   class << self
