@@ -21,7 +21,7 @@ class Util {
       if (str[i].match(/[ｦ-ﾟ]+/)) {
         len++;
       } else {
-        if (escape(str[i]).match(/^\\%u/)) {
+        if (escape(str[i]).match(/^%u/)) {
           len += 2;
         } else {
           len++;
@@ -30,33 +30,6 @@ class Util {
     }
 
     return len;
-  }
-
-  static daysSince(count) {
-    var d = new Date();
-    d.setDate(d.getDate() + (count - 1));
-    return d;
-  }
-}
-
-class DatePicker {
-  constructor() {
-    flatpickr('#date-picker', {
-      minDate: 'today',
-      maxDate: Util.daysSince(14),
-      allowInput: true
-    });
-  }
-}
-
-class TimePicker {
-  constructor() {
-    $('#time-picker').timepicker({
-      'scrollDefault': 'now',
-      'minTime': '0:00',
-      'maxTime': '23:59',
-      'step': 5
-    });
   }
 }
 
@@ -215,7 +188,7 @@ class FileField extends Field {
   validate(file) {
     this.errors = [];
     this.$errors_container.empty().hide();
-    console.log('Start validation', file);
+    console.log('Start validation', this.constructor.name, file);
 
     if (file.type.match(/video|audio/i)) {
       this.errors.push(I18n.errors['videoNotAllowed']);
@@ -276,7 +249,7 @@ class TextField extends Field {
     this.errors = [];
     this.$errors_container.empty().hide();
     var val = this.$el.val();
-    console.log('Start validation', val);
+    console.log('Start validation', this.constructor.name, val);
 
     if (!val || val === '') {
       this.errors.push(I18n.errors.text.blank);
@@ -294,15 +267,13 @@ class DateField extends Field {
     this.$el = $('#date-picker');
     this.$errors_container = $('#form_date_errors');
     this.errors = [];
-
-    new DatePicker();
   }
 
   validate() {
     this.errors = [];
     this.$errors_container.empty().hide();
     var val = this.$el.val();
-    console.log('Start validation', val);
+    console.log('Start validation', this.constructor.name, val);
 
     if (!val || val === '') {
       this.errors.push(I18n.errors.date.blank);
@@ -319,15 +290,13 @@ class TimeField extends Field {
     this.$el = $('#time-picker');
     this.$errors_container = $('#form_time_errors');
     this.errors = [];
-
-    new TimePicker();
   }
 
   validate() {
     this.errors = [];
     this.$errors_container.empty().hide();
     var val = this.$el.val();
-    console.log('Start validation', val);
+    console.log('Start validation', this.constructor.name, val);
 
     if (!val || val === '') {
       this.errors.push(I18n.errors.time.blank);

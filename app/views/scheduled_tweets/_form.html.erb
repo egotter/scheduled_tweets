@@ -1,3 +1,4 @@
+<% tokyo_time = Time.zone.now.in_time_zone('Tokyo') %>
 <%= form_tag api_v1_scheduled_tweets_path, id: 'form', method: :post, multipart: true, remote: true do %>
   <div class="d-flex justify-content-between">
     <div class="textarea-title text-label">
@@ -25,26 +26,22 @@
   <div class="text-muted hint mt-1"><%= t('.hints.asterisk_not_allowed') %></div>
   <div class="text-muted hint mt-1 mb-5"><%= t('.hints.content_type_html') %></div>
 
-  <div class="row no-gutters align-items-end">
-    <div class="col">
-      <div class="form-group mb-0">
-        <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
-        <div id="form_date_errors" class="invalid-feedback form-text"></div>
-        <input type="text" id="date-picker" class="form-control" name="scheduled-date" placeholder="<%= Time.zone.now.year %>/00/00">
-      </div>
-    </div>
+  <div class="form-group">
+    <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
+    <div id="form_date_errors" class="invalid-feedback form-text"></div>
+    <input type="date" id="date-picker" class="form-control" name="scheduled-date"
+           min="<%= tokyo_time.to_date %>" max="<%= (tokyo_time + 14.days).to_date %>" value="<%= tokyo_time.to_date %>">
+  </div>
 
-    <div class="col">
-      <div class="form-group mb-0">
-        <label for="time-picker" class="specified_time-label"><%= t('.schedule_time') %></label>
-        <div id="form_time_errors" class="invalid-feedback form-text"></div>
-        <input type="text" id="time-picker" class="form-control" name="scheduled-time" placeholder="00:00" data-time-format="H:i">
-      </div>
-    </div>
+  <div class="form-group">
+    <label for="time-picker" class="specified_time-label"><%= t('.schedule_time') %></label>
+    <div id="form_time_errors" class="invalid-feedback form-text"></div>
+    <input type="time" id="time-picker" class="form-control" name="scheduled-time"
+           value="<%= (tokyo_time + 1.hour).strftime('%H:%M') %>">
+  </div>
 
-    <div class="col">
-      <button style="" id="submit" type="submit" class="btn btn-success"><%= t('.create') %></button>
-    </div>
+  <div>
+    <button style="" id="submit" type="submit" class="btn btn-success"><%= t('.create') %></button>
   </div>
 
   <%= hidden_field_tag :tweet_text, '', class: 'tweet-text' %>
