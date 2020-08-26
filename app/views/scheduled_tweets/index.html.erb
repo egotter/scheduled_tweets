@@ -24,12 +24,12 @@
   <%= render partial: 'alert_message', locals: {type: 'warning'} %>
 </div>
 
-<%= waved_section '#fff', '#eff3f9' do %>
+<%= waved_section do %>
   <div class="container">
     <%= offset_anchor('schedule-tweet') %>
     <h2 class="h4 mt-5"><%= t('.create.title') %></h2>
 
-    <div class="my-5"><%= t('.create.desc') %></div>
+    <div class="my-5"><%= t('.create.desc_html') %></div>
 
     <div class="row">
       <div class="col-lg-6">
@@ -53,39 +53,33 @@
   </div>
 <% end %>
 
-<%= waved_section '#fff', '#eff3f9' do %>
+<%= waved_section do %>
   <div class="container">
     <h2 class="h4 mt-5"><%= t('.scheduled.title') %></h2>
-
     <div class="my-5"><%= t('.scheduled.desc') %></div>
 
-    <div class="row">
-      <div class="col-lg-6">
-        <div id="not-published-tweets">
-          <div class="title"><%= t('.scheduled.scheduled') %></div>
-          <% if @scheduled_tweets.not_published.any? %>
-            <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.not_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
-          <% else %>
-            <%= t('.none') %>
-          <% end %>
-        </div>
-      </div>
+    <div id="not-published-tweets" class="my-3">
+      <% if @scheduled_tweets.not_published.any? %>
+        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.not_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+      <% else %>
+        <%= t('.none') %>
+      <% end %>
+    </div>
 
-      <div class="col-lg-6">
-        <div id="published-tweets">
-          <div class="title"><%= t('.scheduled.published') %></div>
-          <% if @scheduled_tweets.published.any? %>
-            <%= render(partial: 'published_tweet', collection: @scheduled_tweets.published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
-          <% else %>
-            <%= t('.none') %>
-          <% end %>
-        </div>
-      </div>
+    <h2 class="h4 mt-5"><%= t('.published.title') %></h2>
+    <div class="my-5"><%= t('.published.desc') %></div>
+
+    <div id="published-tweets" class="my-3">
+      <% if @scheduled_tweets.published.any? %>
+        <%= render(partial: 'published_tweet', collection: @scheduled_tweets.published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+      <% else %>
+        <%= t('.none') %>
+      <% end %>
     </div>
   </div>
 <% end %>
 
-<%= waved_section '#fff', '#eff3f9' do %>
+<%= waved_section do %>
   <div class="container">
     <%= offset_anchor('how-to-use') %>
     <h2 class="h4 mt-5"><%= t('.how_to_use.title') %></h2>

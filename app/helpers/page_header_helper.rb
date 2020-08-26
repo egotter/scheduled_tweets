@@ -12,7 +12,7 @@ module PageHeaderHelper
     HTML
   end
 
-  def waved_section(start_color, end_color, &block)
+  def waved_section(start_color = '#fff', end_color = '#eff3f9', &block)
     <<~HTML.html_safe
       <div style="background-image: linear-gradient(#{start_color} 0%, #{end_color} 100%); position: relative; padding-bottom: 80px;">
         #{capture(&block)}
