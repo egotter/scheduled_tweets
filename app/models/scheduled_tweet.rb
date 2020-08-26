@@ -15,6 +15,10 @@ class ScheduledTweet < ApplicationRecord
     end
   end
 
+  after_create_commit do
+    CreateTweetWorker.perform_at(time, id, user_id: user.id, text: text)
+  end
+
   scope :published, -> do
     where.not(published_at: nil)
   end

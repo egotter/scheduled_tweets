@@ -28,7 +28,6 @@ class Api::V1::ScheduledTweetsController < ApiController
         user_id: current_user.id,
         text: params[:tweet_text],
         time: datetime.datetime,
-        repeat_type: params['repeat_type'],
     )
 
     if tweet.save
@@ -36,7 +35,6 @@ class Api::V1::ScheduledTweetsController < ApiController
         tweet.images.attach(params['input-image'])
       end
 
-      CreateTweetWorker.perform_at(tweet.time, tweet.id, user_id: current_user.id, text: tweet.text)
       message = I18n.t('scheduled_tweets.create.message', time: tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M"))
       render json: {message: message}
     else
