@@ -4,10 +4,13 @@ ja:
       brand_title: 'ツイート予約投稿'
       sign_in: 'ログイン'
       sign_out: 'ログアウト'
-      free_trial: '無料でツイート予約する'
       terms_of_use: '利用規約'
       privacy_policy: 'プライバシーポリシー'
       back_to_egotter: 'えごったーに戻る'
+    header:
+      brand_title: 'ツイート予約投稿'
+      sign_in: 'ログイン'
+      free_trial: '無料で試す'
   scheduled_tweets:
     index:
       meta:

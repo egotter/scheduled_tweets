@@ -5,10 +5,11 @@
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-6">
-        <h1 class="text-white"><%= t('.page_header.title') %></h1>
+        <h1 class="h2 text-white mb-3"><%= t('.page_header.title') %></h1>
         <p class="text-white mb-5" style="line-height: 1.8;"><%= t('.page_header.description') %></p>
         <a href="#schedule-tweet" class="btn btn-lg btn-primary d-inline-block"><%= t('.page_header.free_trial') %></a>
         &nbsp;
+        <div class="d-block d-md-none mb-3"></div>
         <a class="text-white" href="#how-to-use"><%= t('.page_header.see_how_to_use') %></a>
         <div class="d-block d-lg-none mb-5"></div>
       </div>
@@ -26,7 +27,7 @@
 <%= waved_section '#fff', '#eff3f9' do %>
   <div class="container">
     <%= offset_anchor('schedule-tweet') %>
-    <h2 class="h3 mt-5"><%= t('.create.title') %></h2>
+    <h2 class="h4 mt-5"><%= t('.create.title') %></h2>
 
     <div class="my-5"><%= t('.create.desc') %></div>
 
@@ -54,7 +55,7 @@
 
 <%= waved_section '#fff', '#eff3f9' do %>
   <div class="container">
-    <h2 class="h3 mt-5"><%= t('.scheduled.title') %></h2>
+    <h2 class="h4 mt-5"><%= t('.scheduled.title') %></h2>
 
     <div class="my-5"><%= t('.scheduled.desc') %></div>
 
@@ -87,7 +88,7 @@
 <%= waved_section '#fff', '#eff3f9' do %>
   <div class="container">
     <%= offset_anchor('how-to-use') %>
-    <h2 class="h3 mt-5"><%= t('.how_to_use.title') %></h2>
+    <h2 class="h4 mt-5"><%= t('.how_to_use.title') %></h2>
     <div class="my-5">
       <div class="mb-5"><%= t('.how_to_use.description') %></div>
 
@@ -104,7 +105,7 @@
   </div>
 
   <div class="container">
-    <h2 class="h3 mb-4"><%= t('.support.title') %></h2>
+    <h2 class="h4 mb-4"><%= t('.support.title') %></h2>
     <div><%= t('.support.text_html') %></div>
   </div>
   <div class="mb-4"></div>

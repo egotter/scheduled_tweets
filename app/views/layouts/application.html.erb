@@ -50,20 +50,7 @@
 </head>
 
 <body>
-
-<nav class="navbar navbar-dark fixed-top" style="padding: 10px;">
-  <div class="container">
-    <a class="navbar-brand text-white" href="<%= root_path %>"><%= t('.brand_title') %></a>
-    <ul class="nav">
-      <% if user_signed_in? %>
-        <li class="nav-item"><a class="nav-link text-white" href="#"><%= '@' + current_user.screen_name %></a></li>
-      <% else %>
-        <li class="nav-item"><a class="nav-link text-white" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a></li>
-        <li class="nav-item"><a class="nav-link btn btn-primary text-white" href="#schedule-tweet"><%= t('.free_trial') %></a></li>
-      <% end %>
-    </ul>
-  </div>
-</nav>
+<%= render partial: 'layouts/header' %>
 
 <% if notice %>
   <script>

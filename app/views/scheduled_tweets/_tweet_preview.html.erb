@@ -12,11 +12,11 @@
         <span class="published-at">
           &sdot;
           <% if tweet.persisted? %>
-            <% text = tweet.publish_time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M") %>
+            <% publish_time = tweet.publish_time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M") %>
             <% if tweet.published? %>
-              <%= link_to text, "https://twitter.com/#{user.screen_name}/status/#{tweet.tweet_id}", target: '_blank' %>
+              <%= link_to publish_time, "https://twitter.com/#{user.screen_name}/status/#{tweet.tweet_id}", target: '_blank' %>
             <% else %>
-              <%= text %>
+              <%= publish_time %>
             <% end %>
           <% else %>
             <%= time_ago_in_words(tweet.time.in_time_zone('Tokyo')) %>

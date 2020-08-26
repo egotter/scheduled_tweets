@@ -1,0 +1,15 @@
+<ul class="navbar navbar-dark fixed-top py-3">
+  <li><a class="text-white" href="<%= root_path %>"><%= t('.brand_title') %></a></li>
+  <li>
+    <% if user_signed_in? %>
+      <a class="text-white" href="#"><%= '@' + current_user.screen_name %></a>
+    <% else %>
+      <a class="text-white" href="<%= user_twitter_omniauth_authorize_path %>"><%= t('.sign_in') %></a>
+    <% end %>
+  </li>
+  <% unless user_signed_in? %>
+    <li>
+      <a class="btn btn-primary text-white" href="#schedule-tweet"><%= t('.free_trial') %></a>
+    </li>
+  <% end %>
+</ul>
