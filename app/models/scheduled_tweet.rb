@@ -75,7 +75,7 @@ class ScheduledTweet < ApplicationRecord
   end
 
   def specified_datetime_in_the_distant_future?
-    specified_datetime > 2.weeks.since
+    specified_datetime > self.class.max_date
   end
 
   def published?
@@ -84,5 +84,11 @@ class ScheduledTweet < ApplicationRecord
 
   def publish_time
     published? ? published_at : time
+  end
+
+  class << self
+    def max_date
+      1.year.since.in_time_zone('Tokyo').to_date
+    end
   end
 end

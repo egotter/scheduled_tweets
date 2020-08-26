@@ -30,7 +30,7 @@
     <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
     <div id="form_date_errors" class="invalid-feedback form-text"></div>
     <input type="date" id="date-picker" class="form-control" name="scheduled-date"
-           min="<%= tokyo_time.to_date %>" max="<%= (tokyo_time + 14.days).to_date %>" value="<%= tokyo_time.to_date %>">
+           min="<%= tokyo_time.to_date %>" max="<%= ScheduledTweet.max_date %>" value="<%= tokyo_time.to_date %>">
   </div>
 
   <div class="form-group">
