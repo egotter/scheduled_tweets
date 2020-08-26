@@ -131,8 +131,6 @@ ja:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
         text_invalid: 'にアスタリスク * は使用できません'
-        cannot_be_in_the_past: 'は1分以上先を指定してください'
-        cannot_be_in_the_distant_future: 'は2週間以内を指定してください'
         too_many_not_published_tweets: '一度に予約できるツイートは最大%{count}個です'
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
@@ -142,7 +140,17 @@ ja:
       uploaded_file:
         size: 'ファイルサイズ'
         content_type: 'ファイルの種類'
+      scheduled_tweet_time:
+        date: '日付'
+        time: '時間'
+        datetime: '日時'
     errors:
+      models:
+        scheduled_tweet_time:
+          attributes:
+            datetime:
+              cannot_be_in_the_past: 'は1分以上先を指定してください'
+              cannot_be_in_the_distant_future: 'は2週間以内を指定してください'
       messages:
         file_size_too_big: 'が大きすぎるため、ツイートに添付することができません。（最大 15 MB）'
         invalid_content_type: 'は JPG、GIF、PNG のいずれかである必要があります。'
