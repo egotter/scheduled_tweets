@@ -5,9 +5,11 @@ class ScheduledTweet < ApplicationRecord
   validates :text, presence: true
   validates :time, presence: true
 
+  MAX_TWEETS = 100
+
   validate on: :create do
-    if user.scheduled_tweets.not_published.size > 30
-      errors.add(:base, I18n.t('activerecord.errors.messages.too_many_not_published_tweets', count: 30))
+    if user.scheduled_tweets.not_published.size >= MAX_TWEETS
+      errors.add(:base, I18n.t('activerecord.errors.messages.too_many_not_published_tweets', count: MAX_TWEETS))
     end
 
     if text.to_s.include?('*')
