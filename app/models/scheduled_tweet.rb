@@ -12,6 +12,10 @@ class ScheduledTweet < ApplicationRecord
       errors.add(:base, I18n.t('activerecord.errors.messages.too_many_not_published_tweets', count: MAX_TWEETS))
     end
 
+    unless TextValidator.new(text).valid?
+      errors.add(:text, :text_too_long)
+    end
+
     if text.to_s.include?('*')
       errors.add(:text, :text_invalid)
     end
@@ -35,5 +39,17 @@ class ScheduledTweet < ApplicationRecord
 
   def publish_time
     published? ? published_at : time
+  end
+
+  class TextValidator
+    include Twitter::TwitterText::Validation
+
+    def initialize(text)
+      @text = text
+    end
+
+    def valid?
+      parse_tweet(@text)[:valid]
+    end
   end
 end

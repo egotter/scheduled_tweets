@@ -107,6 +107,7 @@ ja:
       placeholder: 'テキストやリンクをここに入力してください。'
       attach_image: '画像を添付'
       hints:
+        write_url_at_the_end: 'URLはテキストの最後に書くと文字数の節約になります。'
         asterisk_not_allowed: 'アスタリスク * は使用できません。'
         content_type_html: '利用できる画像は JPG、GIF、PNG です。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">詳しく</a>'
       schedule_date: 'ツイートする日付'
@@ -131,6 +132,7 @@ ja:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'
         text_invalid: 'にアスタリスク * は使用できません'
+        text_too_long: 'が長すぎます。日本語は 140文字以内 にする必要があります'
         too_many_not_published_tweets: '一度に予約できるツイートは最大%{count}個です'
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
