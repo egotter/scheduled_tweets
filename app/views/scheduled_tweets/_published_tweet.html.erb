@@ -1,1 +1,6 @@
-<%= render partial: 'tweet_preview', locals: {user: preview_user, tweet: tweet} %>
+<div class="alert alert-light alert-dismissible fade show" role="alert" style="max-width: 550px;">
+  <%= render partial: 'tweet_preview', locals: {user: preview_user, tweet: tweet} %>
+  <button type="button" class="close" data-dismissaaa="alert" aria-label="Close">
+    <span aria-hidden="true" onclick="window.open('https://twitter.com/<%= preview_user.screen_name %>/status/<%= tweet.tweet_id %>');">&times;</span>
+  </button>
+</div>
