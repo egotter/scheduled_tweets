@@ -25,6 +25,19 @@ class ScheduledTweet < ApplicationRecord
     CreateTweetWorker.perform_at(time, id, user_id: user.id, text: text)
   end
 
+  after_destroy do
+    begin
+      Sidekiq::ScheduledSet.new.scan(CreateTweetWorker.name).select do |job|
+        if job.klass == CreateTweetWorker.name && job.args[0] == id
+          job.delete
+          break
+        end
+      end
+    rescue => e
+      logger.warn "after_destroy: #{e.inspect} id=#{id}"
+    end
+  end
+
   scope :published, -> do
     where.not(published_at: nil)
   end
