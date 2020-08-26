@@ -102,9 +102,10 @@ ja:
     form:
       tweet: '予約するツイート'
       placeholder: 'テキストやリンクをここに入力してください。'
+      attach_image: '画像を添付'
       hints:
         asterisk_not_allowed: 'アスタリスク * は使用できません。'
-        content_type_html: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">仕様</a>'
+        content_type_html: '利用できる画像は JPG、GIF、PNG です。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">詳しく</a>'
       schedule_date: 'ツイートする日付'
       schedule_time: 'ツイートする時間'
       create: 'ツイートを予約する'

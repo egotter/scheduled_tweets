@@ -15,7 +15,7 @@
       <textarea id="input-text" placeholder="<%= t('.placeholder') %>"></textarea>
     </div>
     <div class="input-actions">
-      <span class="upload-file"><i class="far fa-image mr-3"></i></span>
+      <span class="upload-file small"><i class="far fa-image mr-1"></i><%= t('.attach_image') %></span>
       <span class="input-emoji" style="display: none;"><i class="far fa-smile mr-3"></i></span>
     </div>
   </div>
@@ -23,8 +23,8 @@
   <input type="file" id="input-image" name="input-image" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;">
   <div id="form_images_errors" class="invalid-feedback form-text"></div>
 
-  <div class="text-muted hint mt-1"><%= t('.hints.asterisk_not_allowed') %></div>
-  <div class="text-muted hint mt-1 mb-5"><%= t('.hints.content_type_html') %></div>
+  <div class="text-muted small mt-1"><%= t('.hints.asterisk_not_allowed') %></div>
+  <div class="text-muted small mt-1 mb-5"><%= t('.hints.content_type_html') %></div>
 
   <div class="form-group">
     <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
