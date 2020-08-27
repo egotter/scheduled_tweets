@@ -10,16 +10,10 @@ class Api::V1::ScheduledTweetsController < ApiController
   end
 
   def create
-    datetime = ScheduledTweetTime.new(date: params['scheduled-date'], time: params['scheduled-time'])
-    unless datetime.valid?
-      render json: {error: datetime.errors.full_messages}, status: :unprocessable_entity
-      return
-    end
-
     tweet = ScheduledTweet.new(
         user_id: current_user.id,
         text: params[:tweet_text],
-        time: datetime.datetime,
+        time_str: "#{params['scheduled-date']} #{params['scheduled-time']}",
         uploaded_files: [params['input-image']].compact,
     )
 

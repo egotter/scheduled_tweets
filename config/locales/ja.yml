@@ -148,9 +148,9 @@ ja:
         datetime: '日時'
     errors:
       models:
-        scheduled_tweet_time:
+        scheduled_tweet/time_validator:
           attributes:
-            datetime:
+            time:
               cannot_be_in_the_past: 'は1分以上先を指定してください'
               cannot_be_in_the_distant_future: 'は2週間以内を指定してください'
       messages:

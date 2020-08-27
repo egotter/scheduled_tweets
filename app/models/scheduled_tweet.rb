@@ -5,11 +5,24 @@ class ScheduledTweet < ApplicationRecord
   validates :text, presence: true
   validates :time, presence: true
 
-  attr_accessor :uploaded_files
+  TIME_REGEXP = /\A\d{4}[\/-]\d{2}[\/-]\d{2} \d{2}:\d{2}\z/
+
+  attr_accessor :time_str, :uploaded_files
+
+  before_validation do
+    if time_str.present? && time_str.match?(TIME_REGEXP)
+      self.time = time_str.in_time_zone('Tokyo')
+      self.time_str = nil
+    end
+  end
 
   MAX_TWEETS = 100
 
   validate on: :create do
+    if time && !(time_validator = TimeValidator.new(time: time)).valid?
+      errors.merge!(time_validator.errors)
+    end
+
     uploaded_files&.each do |uploaded_file|
       unless (file = UploadedFile.new(file: uploaded_file)).valid?
         errors.merge!(file.errors)
@@ -69,6 +82,34 @@ class ScheduledTweet < ApplicationRecord
     published? ? published_at : time
   end
 
+  class TimeValidator
+    include ActiveModel::Model
+    include ActiveModel::Attributes
+
+    attribute :time, :datetime
+
+    validate :time_cannot_be_in_the_past,
+             :time_cannot_be_in_the_distant_future
+
+    def time_cannot_be_in_the_past
+      if time.present? && time < 1.minute.since.in_time_zone('Tokyo')
+        errors.add(:time, :cannot_be_in_the_past)
+      end
+    end
+
+    def time_cannot_be_in_the_distant_future
+      if time.present? && time > self.class.max_date
+        errors.add(:time, :cannot_be_in_the_distant_future)
+      end
+    end
+
+    class << self
+      def max_date
+        1.year.since.in_time_zone('Tokyo').to_date
+      end
+    end
+  end
+
   class TextValidator
     include Twitter::TwitterText::Validation
 
@@ -77,7 +118,7 @@ class ScheduledTweet < ApplicationRecord
     end
 
     def valid?
-      parse_tweet(@text)[:valid]
+      @text.present? && parse_tweet(@text)[:valid]
     end
   end
 end
