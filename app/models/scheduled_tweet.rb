@@ -5,19 +5,34 @@ class ScheduledTweet < ApplicationRecord
   validates :text, presence: true
   validates :time, presence: true
 
+  attr_accessor :uploaded_files
+
   MAX_TWEETS = 100
 
   validate on: :create do
+    uploaded_files&.each do |uploaded_file|
+      unless (file = UploadedFile.new(file: uploaded_file)).valid?
+        errors.merge!(file.errors)
+        break
+      end
+    end
+
     if user.scheduled_tweets.not_published.size >= MAX_TWEETS
       errors.add(:base, I18n.t('activerecord.errors.messages.too_many_not_published_tweets', count: MAX_TWEETS))
     end
 
-    unless TextValidator.new(text).valid?
+    if text && !TextValidator.new(text).valid?
       errors.add(:text, :text_too_long)
     end
 
-    if text.to_s.include?('*')
+    if text&.include?('*')
       errors.add(:text, :text_invalid)
+    end
+  end
+
+  after_create do
+    uploaded_files&.each do |file|
+      images.attach(file)
     end
   end
 

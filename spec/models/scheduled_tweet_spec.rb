@@ -3,6 +3,23 @@ require 'rails_helper'
 RSpec.describe ScheduledTweet, type: :model do
   let(:user) { User.create!(uid: 1, screen_name: 'sn') }
 
+  context 'uploaded_files validation' do
+    let(:instance) { described_class.new(user_id: user.id, text: 'text', uploaded_files: [uploaded_file]) }
+
+    [
+        ActionDispatch::Http::UploadedFile.new(filename: 'image_48x48.jpg', type: 'image/jpeg', tempfile: File.open(Rails.root.join('public', 'image_48x48.jpg'))),
+    ].each do |file_value|
+      context "uploaded_file is #{file_value.inspect}" do
+        let(:uploaded_file) { file_value }
+        it do
+          instance.valid?
+          expect(instance.errors.has_key?(:size)).to be_falsey
+          expect(instance.errors.has_key?(:content_type)).to be_falsey
+        end
+      end
+    end
+  end
+
   context 'text validation' do
     let(:instance) { described_class.new(user_id: user.id, text: text) }
 

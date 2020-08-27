@@ -10,14 +10,6 @@ class Api::V1::ScheduledTweetsController < ApiController
   end
 
   def create
-    if params['input-image']
-      uploaded_file = UploadedFile.new(size: params['input-image'].size, content_type: params['input-image'].content_type)
-      unless uploaded_file.valid?
-        render json: {error: uploaded_file.errors.full_messages}, status: :unprocessable_entity
-        return
-      end
-    end
-
     datetime = ScheduledTweetTime.new(date: params['scheduled-date'], time: params['scheduled-time'])
     unless datetime.valid?
       render json: {error: datetime.errors.full_messages}, status: :unprocessable_entity
@@ -28,13 +20,10 @@ class Api::V1::ScheduledTweetsController < ApiController
         user_id: current_user.id,
         text: params[:tweet_text],
         time: datetime.datetime,
+        uploaded_files: [params['input-image']].compact,
     )
 
     if tweet.save
-      if params['input-image']
-        tweet.images.attach(params['input-image'])
-      end
-
       message = I18n.t('scheduled_tweets.create.message', time: tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M"))
       render json: {message: message}
     else
