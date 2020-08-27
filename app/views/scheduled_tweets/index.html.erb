@@ -129,28 +129,15 @@
       content_types: <%= raw ScheduledTweet::FileValidator::CONTENT_TYPES.to_json %>
     };
 
-    var destroyScheduledTweet = function (id, done, failed) {
-      var url = '/api/v1/scheduled_tweets/'; // api_v1_scheduled_tweet_path(id: 'ID')
-      $.ajax({
-        url: url + id,
-        type: 'POST',
-        data: {'_method': 'DELETE'}
-      }).done(done).fail(failed);
-    };
-
-    $('#not-published-tweets .alert').on('close.bs.alert', function () {
-      var id = $(this).data('scheduled-tweet-id');
-      destroyScheduledTweet(id, function done(res) {
-        console.log('done', res);
-        SnackMessage.success(res['message']);
-      }, function failed(res) {
-        console.log('fail', res);
-      });
+    $('#not-published-tweets .alert').each(function (_, el) {
+      $(el).on('close.bs.alert', function () {
+        new ScheduledTweet(this).destroy();
+      })
     });
 
-    window._form = new Form();
+    new Form();
 
-    _form.$submit.on('click', function (e) {
+    $('#submit').on('click', function () {
       if (!isSignedIn) {
         SnackMessage.alert(I18n.errors['needSignIn']);
         return false;

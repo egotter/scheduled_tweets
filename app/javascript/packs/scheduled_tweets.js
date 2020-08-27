@@ -59,7 +59,6 @@ class ImagePreview {
 class Form {
   constructor() {
     this.$el = $('#form');
-    this.$submit = $('#submit');
     this.fields = [
       new TextField(),
       new DateField(),
@@ -306,3 +305,26 @@ class TimeField extends Field {
     return this.errors.length === 0;
   }
 }
+
+class ScheduledTweet {
+  constructor(el) {
+    this.tweet_id = $(el).data('scheduled-tweet-id');
+  }
+
+  destroy() {
+    var url = '/api/v1/scheduled_tweets/' + this.tweet_id; // api_v1_scheduled_tweet_path(id: 'ID')
+    console.log('destroy', url);
+    $.ajax({
+      url: url,
+      type: 'POST',
+      data: {'_method': 'DELETE'}
+    }).done(function done(res) {
+      console.log('done', res);
+      SnackMessage.success(res['message']);
+    }).fail(function failed(res) {
+      console.log('fail', res);
+    });
+  }
+}
+
+window.ScheduledTweet = ScheduledTweet;

@@ -28,8 +28,8 @@ class Api::V1::ScheduledTweetsController < ApiController
   end
 
   def destroy
-    tweet = ScheduledTweet.find(params[:id])
+    tweet = current_user.scheduled_tweets.not_published.find_by(id: params[:id]).destroy
     message = I18n.t('scheduled_tweets.destroy.message', time: tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M"))
-    render json: {message: message, record: tweet.destroy}
+    render json: {message: message}
   end
 end
