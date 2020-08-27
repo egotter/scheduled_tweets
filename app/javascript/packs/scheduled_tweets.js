@@ -59,17 +59,16 @@ class ImagePreview {
 class Form {
   constructor() {
     this.$el = $('#form');
-    this.fields = [
-      new TextField(),
-      new DateField(),
-      new TimeField(),
-    ];
+    this.textField = new TextField();
+    this.dateField = new DateField();
+    this.timeField = new TimeField();
 
     var fileField = new FileField();
     var imagePreview = new ImagePreview();
     imagePreview.on('close', function () {
       fileField.clear();
     });
+    this.fileField = fileField;
 
     var self = this;
     this.$el.on('ajax:beforeSend', function (e) { // After click
@@ -78,13 +77,6 @@ class Form {
       } else {
         e.preventDefault();
         e.stopPropagation();
-
-        self.fields.forEach(function (field) {
-          if (field.errors.length !== 0) {
-            console.warn(field, field.errors);
-            field.displayErrors();
-          }
-        });
         return false;
       }
     });
@@ -114,26 +106,41 @@ class Form {
 
   validate() {
     console.log('Start form validation');
-    var results = [];
-    this.fields.forEach(function (field) {
-      results.push(field.validate());
+
+    var tweet = new ScheduledTweet({
+      text: this.textField.val(),
+      date: this.dateField.val(),
+      time: this.timeField.val()
     });
-    return results.every(r => r);
+
+    if (tweet.validate() && this.fileField.validate()) {
+      return true;
+    } else {
+      this.textField.displayErrors(tweet.errors['text']);
+      this.dateField.displayErrors(tweet.errors['date']);
+      this.timeField.displayErrors(tweet.errors['time']);
+      return false;
+    }
   }
 }
 
 window.Form = Form;
 
+//
+// Field
+//
+
 class Field {
   constructor() {
   }
 
-  displayErrors() {
-    if (this.errors.length === 0) {
-      this.$errors_container.empty().hide();
+  displayErrors(errors) {
+    this.$errors_container.empty().hide();
+    if (!errors || errors.length === 0) {
+      // Do nothing
     } else {
       var $ul = $('<ul>');
-      this.errors.forEach(function (error) {
+      errors.forEach(function (error) {
         var $er = $('<li>', {text: error});
         $ul.append($er);
       });
@@ -147,7 +154,6 @@ class FileField extends Field {
     super();
     var $el = this.$el = $('#input-image');
     this.$errors_container = $('#form_images_errors');
-    this.errors = [];
 
     $('.upload-file').on('click', function () {
       $el.trigger('click');
@@ -178,32 +184,17 @@ class FileField extends Field {
         };
 
         reader.readAsDataURL(file);
-      } else {
-        this.displayErrors();
       }
     }
   }
 
   validate(file) {
-    this.errors = [];
-    this.$errors_container.empty().hide();
-    console.log('Start validation', this.constructor.name, file);
-
-    if (file.type.match(/video|audio/i)) {
-      this.errors.push(I18n.errors['videoNotAllowed']);
-      return;
+    var validator = new FileValidator(file);
+    var result = validator.validate();
+    if (!result) {
+      this.displayErrors(validator.errors);
     }
-
-    if (!Validation.content_types.includes(file.type)) {
-      this.errors.push(I18n.errors['invalidContentType']);
-      return;
-    }
-
-    if (file.size > Validation.max_size) { // 15 MB
-      this.errors.push(I18n.errors['fileSizeTooBig']);
-    }
-
-    return this.errors.length === 0;
+    return result;
   }
 }
 
@@ -212,7 +203,6 @@ class TextField extends Field {
     super();
     this.$el = $('#input-text');
     this.$errors_container = $('#form_text_errors');
-    this.errors = [];
     this.remainingMax = 280;
 
     this.$el.autosize();
@@ -244,42 +234,20 @@ class TextField extends Field {
     $('.remaining-count').text(count);
   }
 
-  validate() {
-    this.errors = [];
-    this.$errors_container.empty().hide();
-    var val = this.$el.val();
-    console.log('Start validation', this.constructor.name, val);
-
-    if (!val || val === '') {
-      this.errors.push(I18n.errors.text.blank);
-      return;
-    }
-
-    return this.errors.length === 0;
+  val() {
+    return this.$el.val();
   }
 }
-
 
 class DateField extends Field {
   constructor() {
     super();
     this.$el = $('#date-picker');
     this.$errors_container = $('#form_date_errors');
-    this.errors = [];
   }
 
-  validate() {
-    this.errors = [];
-    this.$errors_container.empty().hide();
-    var val = this.$el.val();
-    console.log('Start validation', this.constructor.name, val);
-
-    if (!val || val === '') {
-      this.errors.push(I18n.errors.date.blank);
-      return;
-    }
-
-    return this.errors.length === 0;
+  val() {
+    return this.$el.val();
   }
 }
 
@@ -288,16 +256,99 @@ class TimeField extends Field {
     super();
     this.$el = $('#time-picker');
     this.$errors_container = $('#form_time_errors');
+  }
+
+  val() {
+    return this.$el.val();
+  }
+}
+
+//
+// Validator
+//
+
+class Validator {
+  constructor(val) {
+    this.val = val;
     this.errors = [];
+  }
+}
+
+class FileValidator {
+  constructor(file) {
+    this.file = file;
+    this.errors = null;
   }
 
   validate() {
+    console.log('Start file validation', this.file);
     this.errors = [];
-    this.$errors_container.empty().hide();
-    var val = this.$el.val();
-    console.log('Start validation', this.constructor.name, val);
 
-    if (!val || val === '') {
+    if (!this.file) {
+      return true;
+    }
+
+    if (this.file.type.match(/video|audio/i)) {
+      this.errors.push(I18n.errors['videoNotAllowed']);
+      return;
+    }
+
+    if (!Validation.content_types.includes(this.file.type)) {
+      this.errors.push(I18n.errors['invalidContentType']);
+      return;
+    }
+
+    if (this.file.size > Validation.max_size) { // 15 MB
+      this.errors.push(I18n.errors['fileSizeTooBig']);
+    }
+
+    return this.errors.length === 0;
+  }
+}
+
+class TextValidator extends Validator {
+  constructor(val) {
+    super(val);
+  }
+
+  validate() {
+    console.log('Start text validation', this.val);
+
+    if (!this.val || this.val === '') {
+      this.errors.push(I18n.errors.text.blank);
+      return;
+    }
+
+    return this.errors.length === 0;
+  }
+}
+
+class DateValidator extends Validator {
+  constructor(val) {
+    super(val);
+  }
+
+  validate() {
+    console.log('Start date validation', this.val);
+
+    if (!this.val || this.val === '') {
+      this.errors.push(I18n.errors.date.blank);
+      return;
+    }
+
+    return this.errors.length === 0;
+  }
+}
+
+class TimeValidator extends Validator {
+  constructor(val) {
+    super(val);
+  }
+
+  validate() {
+    console.log('Start time validation', this.val);
+
+    if (!this.val || this.val === '') {
       this.errors.push(I18n.errors.time.blank);
       return;
     }
@@ -307,12 +358,37 @@ class TimeField extends Field {
 }
 
 class ScheduledTweet {
-  constructor(el) {
-    this.tweet_id = $(el).data('scheduled-tweet-id');
+  constructor(attrs) {
+    this.text = attrs['text'];
+    this.date = attrs['date'];
+    this.time = attrs['time'];
+    this.tweetId = attrs['tweetId'];
+    this.errors = null;
+  }
+
+  validate() {
+    this.errors = {};
+
+    var textValidator = new TextValidator(this.text);
+    if (!textValidator.validate()) {
+      this.errors['text'] = textValidator.errors;
+    }
+
+    var dateValidator = new DateValidator(this.date);
+    if (!dateValidator.validate()) {
+      this.errors['date'] = dateValidator.errors;
+    }
+
+    var timeValidator = new TimeValidator(this.time);
+    if (!timeValidator.validate()) {
+      this.errors['time'] = timeValidator.errors;
+    }
+
+    return Object.keys(this.errors).length === 0;
   }
 
   destroy() {
-    var url = '/api/v1/scheduled_tweets/' + this.tweet_id; // api_v1_scheduled_tweet_path(id: 'ID')
+    var url = '/api/v1/scheduled_tweets/' + this.tweetId; // api_v1_scheduled_tweet_path(id: 'ID')
     console.log('destroy', url);
     $.ajax({
       url: url,

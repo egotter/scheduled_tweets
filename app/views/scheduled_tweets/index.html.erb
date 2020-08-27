@@ -131,7 +131,8 @@
 
     $('#not-published-tweets .alert').each(function (_, el) {
       $(el).on('close.bs.alert', function () {
-        new ScheduledTweet(this).destroy();
+        var tweetId = $(this).data('scheduled-tweet-id');
+        new ScheduledTweet({tweetId: tweetId}).destroy();
       })
     });
 
