@@ -176,3 +176,66 @@ RSpec.describe ScheduledTweet::TextValidator, type: :model do
     end
   end
 end
+
+RSpec.describe ScheduledTweet::FileValidator, type: :model do
+  context 'size validation' do
+    let(:file) { double('File', size: size, content_type: 'image/jpeg') }
+    let(:instance) { described_class.new(file: file) }
+
+    [
+        nil,
+        '',
+        15000000 + 1,
+    ].each do |size_value|
+      context "size is #{size_value.inspect}" do
+        let(:size) { size_value }
+        it do
+          instance.valid?
+          expect(instance.errors.has_key?(:size)).to be_truthy
+        end
+      end
+    end
+
+    [
+        1,
+        15000000 - 1,
+    ].each do |size_value|
+      context "size is #{size_value.inspect}" do
+        let(:size) { size_value }
+        it do
+          instance.valid?
+          expect(instance.errors.has_key?(:size)).to be_falsey
+        end
+      end
+    end
+  end
+
+  context 'content_type validation' do
+    let(:file) { double('File', size: 100, content_type: content_type) }
+    let(:instance) { described_class.new(file: file) }
+
+    [
+        nil,
+        '',
+        'image/aaa',
+    ].each do |content_type_value|
+      context "content_type is #{content_type_value.inspect}" do
+        let(:content_type) { content_type_value }
+        it do
+          instance.valid?
+          expect(instance.errors.has_key?(:content_type)).to be_truthy
+        end
+      end
+    end
+
+    described_class::CONTENT_TYPES.each do |content_type_value|
+      context "content_type is #{content_type_value.inspect}" do
+        let(:content_type) { content_type_value }
+        it do
+          instance.valid?
+          expect(instance.errors.has_key?(:content_type)).to be_falsey
+        end
+      end
+    end
+  end
+end

@@ -19,6 +19,7 @@
     "ga": true,
     "flatpickr": true,
     "I18n": true,
+    "Validation": true,
     "Snackbar": true,
     "SnackMessage": true
   },

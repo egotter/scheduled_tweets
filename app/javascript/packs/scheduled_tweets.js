@@ -195,12 +195,12 @@ class FileField extends Field {
       return;
     }
 
-    if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+    if (!Validation.content_types.includes(file.type)) {
       this.errors.push(I18n.errors['invalidContentType']);
       return;
     }
 
-    if (file.size > 15000000) { // 15 MB
+    if (file.size > Validation.max_size) { // 15 MB
       this.errors.push(I18n.errors['fileSizeTooBig']);
     }
 

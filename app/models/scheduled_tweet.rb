@@ -24,8 +24,8 @@ class ScheduledTweet < ApplicationRecord
     end
 
     uploaded_files&.each do |uploaded_file|
-      unless (file = UploadedFile.new(file: uploaded_file)).valid?
-        errors.merge!(file.errors)
+      unless (file_validator = FileValidator.new(file: uploaded_file)).valid?
+        errors.merge!(file_validator.errors)
         break
       end
     end
@@ -119,6 +119,24 @@ class ScheduledTweet < ApplicationRecord
 
     def valid?
       @text.present? && parse_tweet(@text)[:valid]
+    end
+  end
+
+  class FileValidator
+    include ActiveModel::Model
+
+    attr_reader :size, :content_type, :file
+
+    MAX_SIZE = 15000000
+    CONTENT_TYPES = %w(image/jpeg image/png image/gif)
+
+    validates :size, numericality: {less_than: MAX_SIZE, message: I18n.t('activemodel.errors.messages.file_size_too_big')}
+    validates :content_type, inclusion: {in: CONTENT_TYPES, message: I18n.t('activemodel.errors.messages.invalid_content_type')}
+
+    def initialize(file:)
+      @size = file.size
+      @content_type = file.content_type
+      @file = file
     end
   end
 end

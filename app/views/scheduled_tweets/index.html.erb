@@ -124,6 +124,10 @@
         },
       }
     };
+    window.Validation = {
+      max_size: <%= ScheduledTweet::FileValidator::MAX_SIZE %>,
+      content_types: <%= raw ScheduledTweet::FileValidator::CONTENT_TYPES.to_json %>
+    };
 
     var destroyScheduledTweet = function (id, done, failed) {
       var url = '/api/v1/scheduled_tweets/'; // api_v1_scheduled_tweet_path(id: 'ID')
