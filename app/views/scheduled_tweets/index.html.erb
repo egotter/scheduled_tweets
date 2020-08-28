@@ -105,6 +105,18 @@
       <% end %>
     </div>
   </div>
+<% end %>
+
+<%= waved_section do %>
+  <div class="container">
+    <%= offset_anchor('faq') %>
+    <h2 class="h4 mt-5"><%= t('.faq.title') %></h2>
+    <div class="my-5">
+      <div class="mb-5"><%= t('.faq.description_html') %></div>
+
+      <%= render partial: 'faq' %>
+    </div>
+  </div>
 
   <div class="container">
     <h2 class="h4 mb-4"><%= t('.support.title') %></h2>
