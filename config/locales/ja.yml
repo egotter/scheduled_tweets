@@ -109,12 +109,12 @@ ja:
     form:
       tweet: '予約するツイート'
       placeholder: 'テキストやリンクをここに入力してください。'
-      attach_image: '画像を添付'
       hints:
         write_url_at_the_end: 'URLはテキストの最後に書くと文字数の節約になります。'
         asterisk_not_allowed: 'アスタリスク * は使用できません。'
         max_files: '1つのツイートに添付できる画像は4つまでです。'
         content_type_html: '利用できる画像は JPG、GIF、PNG です。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">詳しく</a>'
+      attach_image: '画像を添付'
       schedule_date: 'ツイートする日付'
       schedule_time: 'ツイートする時間'
       create: 'ツイートを予約する'

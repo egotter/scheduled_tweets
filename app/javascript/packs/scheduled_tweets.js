@@ -163,10 +163,6 @@ class FileField extends Field {
     var $el = this.$el = $('#input-image');
     this.$errors_container = $('#form_images_errors');
 
-    $('.upload-file').on('click', function () {
-      $el.trigger('click');
-    });
-
     var self = this;
     $el.change(function () {
       self.preview.fieldChanged();

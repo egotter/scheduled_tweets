@@ -14,29 +14,41 @@
     <div class="textarea-outer">
       <textarea id="input-text" placeholder="<%= t('.placeholder') %>"></textarea>
     </div>
-    <div class="input-actions">
-      <span class="upload-file small"><i class="far fa-image mr-1"></i><%= t('.attach_image') %></span>
-      <span class="input-emoji" style="display: none;"><i class="far fa-smile mr-3"></i></span>
+    <div class="input-actions" style="display: none;">
+      <span class="input-emoji"><i class="far fa-smile mr-3"></i></span>
     </div>
   </div>
 
-  <input type="file" id="input-image" name="input-images[]" multiple="multiple" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;">
-  <div id="form_images_errors" class="invalid-feedback form-text"></div>
-
   <div class="text-muted small mt-1"><%= t('.hints.write_url_at_the_end') %></div>
-  <div class="text-muted small mt-1"><%= t('.hints.asterisk_not_allowed') %></div>
+  <div class="text-muted small mt-1 mb-5"><%= t('.hints.asterisk_not_allowed') %></div>
+
+  <div class="form-group">
+    <label for="input-image">
+      <i class="far fa-file-image"></i>
+      <%= t('.attach_image') %>
+    </label>
+    <div id="form_images_errors" class="invalid-feedback form-text"></div>
+    <input type="file" id="input-image" class="form-control-file" name="input-images[]" multiple="multiple" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif">
+  </div>
+
   <div class="text-muted small mt-1"><%= t('.hints.max_files') %></div>
   <div class="text-muted small mt-1 mb-5"><%= t('.hints.content_type_html') %></div>
 
   <div class="form-group">
-    <label for="date-picker" class="specified_date-label"><%= t('.schedule_date') %></label>
+    <label for="date-picker">
+      <i class="far fa-calendar"></i>
+      <%= t('.schedule_date') %>
+    </label>
     <div id="form_date_errors" class="invalid-feedback form-text"></div>
     <input type="date" id="date-picker" class="form-control" name="scheduled-date"
            min="<%= (tokyo_time + 1.hour).to_date %>" max="<%= ScheduledTweet::TimeValidator.max_date %>" value="<%= (tokyo_time + 1.hour).to_date %>">
   </div>
 
   <div class="form-group">
-    <label for="time-picker" class="specified_time-label"><%= t('.schedule_time') %></label>
+    <label for="time-picker">
+      <i class="far fa-clock"></i>
+      <%= t('.schedule_time') %>
+    </label>
     <div id="form_time_errors" class="invalid-feedback form-text"></div>
     <input type="time" id="time-picker" class="form-control" name="scheduled-time"
            value="<%= (tokyo_time + 1.hour).strftime('%H:%M') %>">
