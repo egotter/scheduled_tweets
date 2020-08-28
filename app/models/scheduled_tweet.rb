@@ -82,6 +82,20 @@ class ScheduledTweet < ApplicationRecord
     !published_at.nil?
   end
 
+  def publish!
+    client = user.api_client
+
+    if images.any?
+      images[0].open do |file|
+        status = client.update_with_media(text, file)
+        update(tweet_id: status.id, published_at: Time.zone.now)
+      end
+    else
+      status = client.update(text)
+      update(tweet_id: status.id, published_at: Time.zone.now)
+    end
+  end
+
   def publish_time
     published? ? published_at : time
   end

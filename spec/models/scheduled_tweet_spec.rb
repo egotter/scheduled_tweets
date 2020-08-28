@@ -109,7 +109,7 @@ RSpec.describe ScheduledTweet, type: :model do
 
   context 'after_create_commit' do
     it do
-      travel_to '2020/01/01 01:00' do
+      travel_to Time.zone.parse('2020/01/01 01:00') do
         time = 1.hour.since.in_time_zone('Tokyo')
         instance = described_class.new(user_id: user.id, text: 'text', time: time)
 
@@ -145,6 +145,24 @@ RSpec.describe ScheduledTweet, type: :model do
     context 'failed_to_publish' do
       subject { described_class.failed_to_publish }
       it { expect(subject.pluck(:id)).to eq([failed.id]) }
+    end
+  end
+
+  describe '#publish!' do
+    let(:client) { double('Client') }
+    let(:status) { double('Status', id: 1) }
+    let(:instance) { described_class.new(user_id: user.id, text: 'text', time: Time.zone.now.in_time_zone('Tokyo')) }
+    subject { instance.publish! }
+    before do
+      allow(instance).to receive(:user).and_return(user)
+      allow(user).to receive(:api_client).and_return(client)
+    end
+    it do
+      travel_to Time.zone.parse('2020/01/01 01:00') do
+        expect(client).to receive(:update).with('text').and_return(status)
+        expect(instance).to receive(:update).with(tweet_id: 1, published_at: Time.zone.parse('2020/01/01 01:00'))
+        subject
+      end
     end
   end
 end

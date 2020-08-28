@@ -5,18 +5,8 @@ class CreateTweetWorker
   def perform(scheduled_tweet_id, options = {})
     tweet = ScheduledTweet.find(scheduled_tweet_id)
     return if tweet.published?
+    return if (Time.zone.now - tweet.time).abs > 5.minutes
 
-    user = tweet.user
-    client = user.api_client
-
-    if tweet.images.any?
-      tweet.images[0].open do |file|
-        status = client.update_with_media(tweet.text, file)
-        tweet.update(tweet_id: status.id, published_at: Time.zone.now)
-      end
-    else
-      status = client.update(tweet.text)
-      tweet.update(tweet_id: status.id, published_at: Time.zone.now)
-    end
+    tweet.publish!
   end
 end
