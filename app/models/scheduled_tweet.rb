@@ -10,6 +10,10 @@ class ScheduledTweet < ApplicationRecord
   attr_accessor :time_str, :uploaded_files
 
   before_validation do
+    unless RepeatTypeValidator::VALUES.include?(repeat_type)
+      self.repeat_type = nil
+    end
+
     if time_str.present? && time_str.match?(TIME_REGEXP)
       self.time = time_str.in_time_zone('Tokyo')
       self.time_str = nil
@@ -112,6 +116,24 @@ class ScheduledTweet < ApplicationRecord
     published? ? published_at : time
   end
 
+  def repeat_specified?
+    ScheduledTweet::RepeatTypeValidator::VALUES.include?(repeat_type)
+  end
+
+  def copy_for_repeat(uploaded_files)
+    if repeat_type == ScheduledTweet::RepeatTypeValidator::VALUES[0]
+      6.times.map do |n|
+        ScheduledTweet.new(
+            user_id: user_id,
+            text: text,
+            time: time + (n + 1).days,
+            uploaded_files: uploaded_files,
+            repeat_type: repeat_type,
+        )
+      end
+    end
+  end
+
   class TimeValidator
     include ActiveModel::Model
     include ActiveModel::Attributes
@@ -169,5 +191,9 @@ class ScheduledTweet < ApplicationRecord
       @content_type = file.content_type
       @file = file
     end
+  end
+
+  class RepeatTypeValidator
+    VALUES = %w(repeat_for_7days)
   end
 end

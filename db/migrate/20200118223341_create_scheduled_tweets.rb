@@ -6,6 +6,7 @@ class CreateScheduledTweets < ActiveRecord::Migration[6.0]
       t.text :text
       t.json :properties
       t.datetime :time, null: false
+      t.string :repeat_type, null: true
       t.datetime :published_at
 
       t.timestamps null: false

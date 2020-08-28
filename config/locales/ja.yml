@@ -117,6 +117,9 @@ ja:
       attach_image: '画像を添付'
       schedule_date: 'ツイートする日付'
       schedule_time: 'ツイートする時間'
+      repeat_type: 'ツイートの繰り返し'
+      repeat_type_just_this_once: 'この日時に1度だけツイート'
+      repeat_type_repeat_for_7days: '今日から 7日間 同じ時間に毎日ツイート'
       create: 'ツイートを予約する'
     create:
       message: '予約したツイートは %{time} に投稿されます。'

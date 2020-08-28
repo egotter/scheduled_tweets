@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 2020_01_19_093043) do
     t.text "text"
     t.json "properties"
     t.datetime "time", null: false
+    t.string "repeat_type"
     t.datetime "published_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

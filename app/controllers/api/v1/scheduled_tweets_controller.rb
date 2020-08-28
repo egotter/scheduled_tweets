@@ -15,9 +15,15 @@ class Api::V1::ScheduledTweetsController < ApiController
         text: params[:tweet_text],
         time_str: "#{params['scheduled-date']} #{params['scheduled-time']}",
         uploaded_files: params['input-images'],
+        repeat_type: params[:repeat_type],
     )
 
     if tweet.save
+      if tweet.repeat_specified?
+        copied_tweets = tweet.copy_for_repeat(params['input-images'])
+        ApplicationRecord.transaction { copied_tweets.each(&:save!) }
+      end
+
       message = I18n.t('scheduled_tweets.create.message', time: tweet.time.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M"))
       render json: {message: message}
     else
