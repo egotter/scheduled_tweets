@@ -118,6 +118,35 @@ RSpec.describe ScheduledTweet, type: :model do
       end
     end
   end
+
+  context 'scope' do
+    let(:failed) { described_class.new(user_id: user.id, text: 'text', time: 1.hour.ago.in_time_zone('Tokyo')) }
+    let(:published) { described_class.new(user_id: user.id, text: 'text', time: 1.hour.ago.in_time_zone('Tokyo'), published_at: Time.zone.now) }
+    let(:scheduled) { described_class.new(user_id: user.id, text: 'text', time: 1.hour.since.in_time_zone('Tokyo')) }
+
+    before do
+      failed.save!(validate: false)
+      published.save!(validate: false)
+      scheduled.save!(validate: false)
+    end
+
+    it { expect(described_class.all.size).to eq(3) }
+
+    context 'already_published' do
+      subject { described_class.already_published }
+      it { expect(subject.pluck(:id)).to eq([published.id]) }
+    end
+
+    context 'will_be_published' do
+      subject { described_class.will_be_published }
+      it { expect(subject.pluck(:id)).to eq([scheduled.id]) }
+    end
+
+    context 'failed_to_publish' do
+      subject { described_class.failed_to_publish }
+      it { expect(subject.pluck(:id)).to eq([failed.id]) }
+    end
+  end
 end
 
 RSpec.describe ScheduledTweet::TimeValidator, type: :model do

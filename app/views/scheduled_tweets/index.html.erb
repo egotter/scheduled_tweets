@@ -55,9 +55,9 @@
     <h2 class="h4 mt-5"><%= t('.scheduled.title') %></h2>
     <div class="my-5"><%= t('.scheduled.desc') %></div>
 
-    <div id="not-published-tweets" class="my-3">
-      <% if @scheduled_tweets.not_published.any? %>
-        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.not_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+    <div id="will-be-published-tweets" class="my-3">
+      <% if @scheduled_tweets.will_be_published.any? %>
+        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.will_be_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
       <% else %>
         <%= t('.none') %>
       <% end %>
@@ -66,9 +66,20 @@
     <h2 class="h4 mt-5"><%= t('.published.title') %></h2>
     <div class="my-5"><%= t('.published.desc') %></div>
 
-    <div id="published-tweets" class="my-3">
-      <% if @scheduled_tweets.published.any? %>
-        <%= render(partial: 'published_tweet', collection: @scheduled_tweets.published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+    <div id="already-published-tweets" class="my-3">
+      <% if @scheduled_tweets.already_published.any? %>
+        <%= render(partial: 'published_tweet', collection: @scheduled_tweets.already_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+      <% else %>
+        <%= t('.none') %>
+      <% end %>
+    </div>
+
+    <h2 class="h4 mt-5"><%= t('.failed.title') %></h2>
+    <div class="my-5"><%= t('.failed.desc') %></div>
+
+    <div id="failed-to-publish-tweets" class="my-3">
+      <% if @scheduled_tweets.failed_to_publish.any? %>
+        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.failed_to_publish, as: :tweet, cached: false, locals: {preview_user: @preview_user}) %>
       <% else %>
         <%= t('.none') %>
       <% end %>
@@ -129,7 +140,7 @@
       content_types: <%= raw ScheduledTweet::FileValidator::CONTENT_TYPES.to_json %>
     };
 
-    $('#not-published-tweets .alert').each(function (_, el) {
+    $('#will-be-published-tweets .alert').each(function (_, el) {
       $(el).on('close.bs.alert', function () {
         var tweetId = $(this).data('scheduled-tweet-id');
         new ScheduledTweet({tweetId: tweetId}).destroy();

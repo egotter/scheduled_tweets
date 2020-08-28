@@ -30,7 +30,7 @@ class ScheduledTweet < ApplicationRecord
       end
     end
 
-    if user.scheduled_tweets.not_published.size >= MAX_TWEETS
+    if user.scheduled_tweets.will_be_published.size >= MAX_TWEETS
       errors.add(:base, I18n.t('activerecord.errors.messages.too_many_not_published_tweets', count: MAX_TWEETS))
     end
 
@@ -66,12 +66,16 @@ class ScheduledTweet < ApplicationRecord
     end
   end
 
-  scope :published, -> do
+  scope :already_published, -> do
     where.not(published_at: nil)
   end
 
-  scope :not_published, -> do
-    where(published_at: nil)
+  scope :will_be_published, -> do
+    where(published_at: nil).where('time >= ?', Time.zone.now)
+  end
+
+  scope :failed_to_publish, -> do
+    where(published_at: nil).where('time < ?', Time.zone.now)
   end
 
   def published?

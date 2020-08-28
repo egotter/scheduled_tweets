@@ -118,10 +118,9 @@ blockquote.twitter-tweet {
   border: 1px solid #eee;
 }
 
-#not-published-tweets,
-#published-tweets {
-  //max-width: 540px;
-
+#will-be-published-tweets,
+#already-published-tweets,
+#failed-to-publish-tweets {
   .alert {
     margin: 0;
     padding: 0;
