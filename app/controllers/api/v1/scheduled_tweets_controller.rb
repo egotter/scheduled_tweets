@@ -14,7 +14,7 @@ class Api::V1::ScheduledTweetsController < ApiController
         user_id: current_user.id,
         text: params[:tweet_text],
         time_str: "#{params['scheduled-date']} #{params['scheduled-time']}",
-        uploaded_files: [params['input-image']].compact,
+        uploaded_files: params['input-images'],
     )
 
     if tweet.save

@@ -23,10 +23,16 @@ class ScheduledTweet < ApplicationRecord
       errors.merge!(time_validator.errors)
     end
 
-    uploaded_files&.each do |uploaded_file|
-      unless (file_validator = FileValidator.new(file: uploaded_file)).valid?
-        errors.merge!(file_validator.errors)
-        break
+    if uploaded_files&.any?
+      if uploaded_files.size > FileValidator::MAX_FILES
+        errors.add(:base, I18n.t('activerecord.errors.messages.too_many_files', count: FileValidator::MAX_FILES))
+      else
+        uploaded_files.each do |uploaded_file|
+          unless (file_validator = FileValidator.new(file: uploaded_file)).valid?
+            errors.merge!(file_validator.errors)
+            break
+          end
+        end
       end
     end
 
@@ -44,8 +50,8 @@ class ScheduledTweet < ApplicationRecord
   end
 
   after_create do
-    uploaded_files&.each do |file|
-      images.attach(file)
+    if uploaded_files&.any?
+      images.attach(uploaded_files)
     end
   end
 
@@ -85,11 +91,17 @@ class ScheduledTweet < ApplicationRecord
   def publish!
     client = user.api_client
 
-    if images.any?
-      images[0].open do |file|
-        status = client.update_with_media(text, file)
-        update(tweet_id: status.id, published_at: Time.zone.now)
+    if images.attached?
+      files = []
+      begin
+        images.each do |image|
+          image.open { |file| files << File.open(file.path) }
+        end
+        status = client.update_with_media(text, files)
+      ensure
+        files.each(&:close)
       end
+      update(tweet_id: status.id, published_at: Time.zone.now)
     else
       status = client.update(text)
       update(tweet_id: status.id, published_at: Time.zone.now)
@@ -145,6 +157,7 @@ class ScheduledTweet < ApplicationRecord
 
     attr_reader :size, :content_type, :file
 
+    MAX_FILES = 4
     MAX_SIZE = 15000000
     CONTENT_TYPES = %w(image/jpeg image/png image/gif)
 

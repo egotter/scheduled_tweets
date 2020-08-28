@@ -48,6 +48,7 @@ ja:
         video_not_allowed: '動画や音声は、ご自身でアップロードした後にURLをツイートに入れてください。'
         too_big_file: 'ファイルサイズが大きすぎるため、ツイートに添付することができません。（最大 15 MB）'
         invalid_content_type: 'ファイルの種類は JPG、GIF、PNG のいずれかである必要があります。'
+        too_many_files: '1つのツイートに添付できる画像は4つまでです。'
         something_error: '入力した内容にエラーがあります。'
         text:
           blank: 'ツイートのテキストを入力してください。'
@@ -112,6 +113,7 @@ ja:
       hints:
         write_url_at_the_end: 'URLはテキストの最後に書くと文字数の節約になります。'
         asterisk_not_allowed: 'アスタリスク * は使用できません。'
+        max_files: '1つのツイートに添付できる画像は4つまでです。'
         content_type_html: '利用できる画像は JPG、GIF、PNG です。<a href="https://developer.twitter.com/ja/docs/media/upload-media/uploading-media/media-best-practices" target="_blank">詳しく</a>'
       schedule_date: 'ツイートする日付'
       schedule_time: 'ツイートする時間'
@@ -137,6 +139,7 @@ ja:
         text_invalid: 'にアスタリスク * は使用できません'
         text_too_long: 'が長すぎます。日本語は 140文字以内 にする必要があります'
         too_many_not_published_tweets: '一度に予約できるツイートは最大%{count}個です'
+        too_many_files: '1つのツイートに添付できる画像は%{count}つまでです。'
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"

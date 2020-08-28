@@ -39,14 +39,25 @@ class ImagePreview {
     var self = this;
 
     $('#live-preview .preview-image-container').on('close.bs.alert', function () {
-      $(this).hide();
-      $('#live-preview .preview-image').attr('src', null);
-
-      if (self.callback) {
-        self.callback();
-      }
+      self.alertClosed();
       return false;
     });
+  }
+
+  alertClosed() {
+    this.hidePreview();
+    if (this.callback) {
+      this.callback();
+    }
+  }
+
+  fieldChanged() {
+    this.hidePreview();
+  }
+
+  hidePreview() {
+    $('#live-preview .preview-image-container').hide();
+    $('#live-preview .preview-image').attr('src', null);
   }
 
   on(type, fn) {
@@ -62,46 +73,11 @@ class Form {
     this.textField = new TextField();
     this.dateField = new DateField();
     this.timeField = new TimeField();
+    this.fileField = new FileField();
 
-    var fileField = new FileField();
-    var imagePreview = new ImagePreview();
-    imagePreview.on('close', function () {
-      fileField.clear();
-    });
-    this.fileField = fileField;
-
-    var self = this;
-    this.$el.on('ajax:beforeSend', function (e) { // After click
-      if (self.validate()) {
-        return true;
-      } else {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }
-    });
-
-    this.$el.on('ajax:success', function (e) {
-      var response = e.detail[0];
-      console.log('success', response);
-      SnackMessage.success(response['message']);
-
-      ga('send', {
-        hitType: 'event',
-        eventCategory: 'Schedule Success'
-      });
-    });
-
-    this.$el.on('ajax:error', function (e) {
-      var response = e.detail[0];
-      console.log('error', response);
-
-      var message = response['error'];
-      if (Array.isArray(message)) {
-        message = message.join(I18n.delim);
-      }
-      SnackMessage.alert(message);
-    });
+    this.$el.on('ajax:beforeSend', this.beforeSend.bind(this));
+    this.$el.on('ajax:success', this.afterSuccess);
+    this.$el.on('ajax:error', this.afterError);
   }
 
   validate() {
@@ -121,6 +97,38 @@ class Form {
       this.timeField.displayErrors(tweet.errors['time']);
       return false;
     }
+  }
+
+  beforeSend(e) {
+    if (this.validate()) {
+      return true;
+    } else {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }
+
+  afterSuccess(e) {
+    var response = e.detail[0];
+    console.log('success', response);
+    SnackMessage.success(response['message']);
+
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Schedule Success'
+    });
+  }
+
+  afterError(e) {
+    var response = e.detail[0];
+    console.log('error', response);
+
+    var message = response['error'];
+    if (Array.isArray(message)) {
+      message = message.join(I18n.delim);
+    }
+    SnackMessage.alert(message);
   }
 }
 
@@ -161,34 +169,70 @@ class FileField extends Field {
 
     var self = this;
     $el.change(function () {
+      self.preview.fieldChanged();
       self.readFile(this.files);
+    });
+
+    this.preview = new ImagePreview();
+    this.preview.on('close', function () {
+      self.previewClosed();
     });
   }
 
-  clear() {
+  previewClosed() {
     this.$el[0].value = '';
   }
 
   readFile(files) {
-    // TODO Support multiple files
+    if (!files) {
+      return;
+    }
 
-    if (files && files[0]) {
-      var file = files[0];
+    if (!this.validate(files)) {
+      return;
+    }
 
-      if (this.validate(file)) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-          $('#live-preview .preview-image').attr('src', e.target.result);
-          $('#live-preview .preview-image-container').show();
-        };
-
-        reader.readAsDataURL(file);
-      }
+    for (var i = 0; i < files.length; i++) {
+      this.renderPreview(files[i], i);
     }
   }
 
-  validate(file) {
+  renderPreview(file, index) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      var container = $('#live-preview .preview-image-container');
+      container.find('img.index-' + index).attr('src', e.target.result);
+      container.show();
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  validate(files) {
+    if (!files) {
+      files = this.$el[0].files;
+    }
+    if (!files) {
+      return true;
+    }
+
+    if (files.length > Validation.max_files) {
+      this.displayErrors([I18n.errors['tooManyFiles']]);
+      return false;
+    }
+
+    for (var i = 0; i < files.length; i++) {
+      var result = this.validate_each(files[i]);
+      if (!result) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  validate_each(file) {
     var validator = new FileValidator(file);
     var result = validator.validate();
     if (!result) {

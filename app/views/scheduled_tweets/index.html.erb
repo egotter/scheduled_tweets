@@ -123,6 +123,7 @@
         videoNotAllowed: "<%= t('.errors.video_not_allowed') %>",
         fileSizeTooBig: "<%= t('.errors.too_big_file') %>",
         invalidContentType: "<%= t('.errors.invalid_content_type') %>",
+        tooManyFiles: "<%= t('.errors.too_many_files') %>",
         somethingError: "<%= t('.errors.something_error') %>",
         text: {
           blank: "<%= t('.errors.text.blank') %>"
@@ -136,6 +137,7 @@
       }
     };
     window.Validation = {
+      max_files: <%= ScheduledTweet::FileValidator::MAX_FILES %>,
       max_size: <%= ScheduledTweet::FileValidator::MAX_SIZE %>,
       content_types: <%= raw ScheduledTweet::FileValidator::CONTENT_TYPES.to_json %>
     };

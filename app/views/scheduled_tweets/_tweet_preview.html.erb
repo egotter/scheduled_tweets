@@ -26,12 +26,16 @@
       <p class="tweet-preview"><%= tweet.text.gsub("\r", '<br>').html_safe %></p>
 
       <% if tweet.persisted? && tweet.images.any? %>
-        <div class="preview-image-container">
-          <%= image_tag tweet.images[0], class: 'preview-image mb-3' %>
-        </div>
+        <% tweet.images.each do |image| %>
+          <div class="preview-image-container">
+            <%= image_tag image, class: 'preview-image mb-3' %>
+          </div>
+        <% end %>
       <% else %>
         <div style="display: none;" class="preview-image-container alert alert-light alert-dismissible fade show" role="alert">
-          <img class="preview-image mb-3">
+          <% ScheduledTweet::FileValidator::MAX_FILES.times do |n| %>
+            <img class="preview-image index-<%= n %> mb-3">
+          <% end %>
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

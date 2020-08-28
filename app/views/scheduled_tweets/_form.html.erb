@@ -20,11 +20,12 @@
     </div>
   </div>
 
-  <input type="file" id="input-image" name="input-image" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;">
+  <input type="file" id="input-image" name="input-images[]" multiple="multiple" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" style="display: none;">
   <div id="form_images_errors" class="invalid-feedback form-text"></div>
 
   <div class="text-muted small mt-1"><%= t('.hints.write_url_at_the_end') %></div>
   <div class="text-muted small mt-1"><%= t('.hints.asterisk_not_allowed') %></div>
+  <div class="text-muted small mt-1"><%= t('.hints.max_files') %></div>
   <div class="text-muted small mt-1 mb-5"><%= t('.hints.content_type_html') %></div>
 
   <div class="form-group">
