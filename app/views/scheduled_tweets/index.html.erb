@@ -93,15 +93,7 @@
     <div class="my-5">
       <div class="mb-5"><%= t('.how_to_use.description') %></div>
 
-      <% t('.how_to_use.subtitles').zip(t('.how_to_use.descriptions_html'), t('.how_to_use.images')).each.with_index do |(title, description, image), i| %>
-        <div class="row mb-5">
-          <div class="col-lg-6">
-            <div class="text-primary"><%= i + 1 %>. <%= title %></div>
-            <div class="mt-2 mb-5"><%= description %></div>
-          </div>
-          <div class="col-lg"><img class="shadow" style="width: 100%;" src="<%= image_path image %>"></div>
-        </div>
-      <% end %>
+      <%= render partial: 'how_to_use' %>
     </div>
   </div>
 <% end %>

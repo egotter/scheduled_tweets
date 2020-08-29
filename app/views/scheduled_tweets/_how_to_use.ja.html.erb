@@ -1,0 +1,98 @@
+<div class="mb-5">
+  <div class="text-primary">1. ツイートのテキストを入力する</div>
+  <div class="mt-2 mb-3">
+    テキスト入力欄にツイートしたいテキストを入力してください。日本語では140文字、英語では280文字まで入力することができます。<br>
+    <br>
+    URLはテキストの最後に入力してください。そうするとツイートがきれいに表示され、文字数の節約にもなります。アスタリスク * は使うことができません。
+  </div>
+  <a href="<%= image_path '/how_to_use/text.png' %>">
+    <img class="img-responsive shadow d-block" style="max-width: 100%;" src="<%= image_path '/how_to_use/text.png' %>">
+  </a>
+</div>
+
+<div class="mb-5">
+  <div class="text-primary">2. 画像を添付する</div>
+  <div class="mt-2 mb-3">
+    画像ファイルを添付することもできます。 添付できるファイルは、JPG、PNG、GIF形式です。<br>
+    <br>
+    動画や音声を添付したい場合は、ご自身でアップロードした後にURLをご入力ください。
+  </div>
+  <a href="<%= image_path '/how_to_use/image.png' %>">
+    <img class="img-responsive shadow d-block" style="max-width: 100%;" src="<%= image_path '/how_to_use/image.png' %>">
+  </a>
+</div>
+
+<div class="mb-5">
+  <div class="text-primary">3. 予約する日付と時間を入力する</div>
+  <div class="mt-2 mb-3">
+    「ツイートする日付」ではツイートを予約投稿する日付をカレンダーから選択することができます。自分で入力する際は「yyyy/mm/dd」形式で入力してください。
+    約1週間先の日付まで入力できます。<br>
+    <br>
+    「ツイートする時間」にはツイートを予約投稿する時間を一覧から選択して入力してください。自分で入力する際は「hh:mm」形式で入力してください。
+  </div>
+  <a href="<%= image_path '/how_to_use/time.png' %>">
+    <img class="img-responsive shadow d-block" style="max-width: 100%;" src="<%= image_path '/how_to_use/time.png' %>">
+  </a>
+</div>
+
+<div class="mb-5">
+  <div class="text-primary">4. 繰り返しの種類を指定する</div>
+  <div class="mt-2 mb-3">
+    1回だけツイートするか、繰り返しツイートするかを選ぶことができます。「この日時に1度だけツイート」を選ぶと指定した日時に1回ツイートされます。<br>
+    <br>
+    「今日から 7日間 同じ時間に毎日ツイート」を選ぶと指定した日付から7日間指定した時間に毎日ツイートします。
+  </div>
+  <a href="<%= image_path '/how_to_use/repeat.png' %>">
+    <img class="img-responsive shadow d-block" style="max-width: 100%;" src="<%= image_path '/how_to_use/repeat.png' %>">
+  </a>
+</div>
+
+<div class="mb-5">
+  <div class="text-primary">5. 入力したテキストを確認する</div>
+  <div class="mt-2 mb-3">
+    手順1でツイートしたいテキストを入力すると「プレビュー」に実際のツイートに近い形でツイート内容が表示されます。
+    この内容を参考に入力するテキストを調整してください。<br>
+    <br>
+    できるだけ実際のツイートに近い形で表示していますが、完全に同じではない点にご注意ください。
+    より正確な表示確認をしたい場合は、ツイッターの実際の入力欄に試しに入力してみることをおすすめします。
+  </div>
+  <a href="<%= image_path '/how_to_use/preview.png' %>">
+    <img class="img-responsive shadow d-block" style="max-width: 100%;" src="<%= image_path '/how_to_use/preview.png' %>">
+  </a>
+</div>
+
+<div class="mb-5">
+  <div class="text-primary">6. ツイートの予約を完了する</div>
+  <div class="mt-2 mb-3">
+    ツイートのテキストの入力、画像の添付、日時の指定が終わったら、緑色の「「ツイートを予約する」ボタンを押してください。<br>
+    <br>
+    入力した内容に誤りがある場合は、エラーメッセージが表示されます。表示されたメッセージに従い、エラーを修正後、再度「ツイートを予約する」ボタンを押してください。
+  </div>
+  <a href="<%= image_path '/how_to_use/submit.png' %>">
+    <img class="img-responsive shadow d-block" style="max-width: 100%;" src="<%= image_path '/how_to_use/submit.png' %>">
+  </a>
+</div>
+
+<div class="mb-5">
+  <div class="text-primary">7. 予約したツイートを確認する</div>
+  <div class="mt-2 mb-3">
+    ツイートの予約が完了した後に、ページを更新してください。そうすると、ページ下部に予約したツイートの一覧が表示されます。<br>
+    <br>
+    予約したツイートに表示されている日時は、そのツイートが投稿される予定の日時です。
+  </div>
+  <a href="<%= image_path '/how_to_use/scheduled.png' %>">
+    <img class="img-responsive shadow d-block" style="max-width: 100%;" src="<%= image_path '/how_to_use/scheduled.png' %>">
+  </a>
+</div>
+
+<div class="mb-5">
+  <div class="text-primary">8. ツイートの予約を取り消しする</div>
+  <div class="mt-2 mb-3">
+    ツイートの予約が完了した後に、ページを更新してください。そうすると、ページ下部に予約したツイートの一覧が表示されます。<br>
+    <br>
+    予約したツイートには、右上にばつ印が付いています。これをクリックすると、そのツイートの予約を取り消すことができます。
+  </div>
+  <a href="<%= image_path '/how_to_use/delete.png' %>">
+    <img class="img-responsive shadow d-block" style="max-width: 100%;" src="<%= image_path '/how_to_use/delete.png' %>">
+  </a>
+</div>
