@@ -29,6 +29,12 @@
 <%= render partial: 'q', locals: {text: '時間指定はどれくらい細かくできますか？'} %>
 <div class="mb-5">「分」まで指定できます。例えば、2020年1月1日 10時10分 といった指定が可能です。</div>
 
+<%= render partial: 'q', locals: {text: '時間はどれくらい先まで指定できますか？'} %>
+<div class="mb-5">約1年先まで指定できます。</div>
+
+<%= render partial: 'q', locals: {text: '何個まで予約ツイートは作成できますか？'} %>
+<div class="mb-5">100個まで作成できます。</div>
+
 <%= render partial: 'q', locals: {text: '予約済みのツイートを投稿前に編集できますか？'} %>
 <div class="mb-5">今のところできません。予約したツイートを編集したい場合は、一度予約を削除した後に、新しいツイートを予約してください。</div>
 
