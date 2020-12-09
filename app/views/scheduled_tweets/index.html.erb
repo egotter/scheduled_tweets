@@ -55,8 +55,8 @@
     <div class="my-5"><%= t('.scheduled.desc') %></div>
 
     <div id="will-be-published-tweets" class="my-3">
-      <% if @scheduled_tweets.will_be_published.any? %>
-        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.will_be_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+      <% if @scheduled_tweets.any? %>
+        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
       <% else %>
         <%= t('.none') %>
       <% end %>
@@ -66,8 +66,8 @@
     <div class="my-5"><%= t('.published.desc') %></div>
 
     <div id="already-published-tweets" class="my-3">
-      <% if @scheduled_tweets.already_published.any? %>
-        <%= render(partial: 'published_tweet', collection: @scheduled_tweets.already_published, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
+      <% if @published_tweets.any? %>
+        <%= render(partial: 'published_tweet', collection: @published_tweets, as: :tweet, cached: true, locals: {preview_user: @preview_user}) %>
       <% else %>
         <%= t('.none') %>
       <% end %>
@@ -77,8 +77,8 @@
     <div class="my-5"><%= t('.failed.desc') %></div>
 
     <div id="failed-to-publish-tweets" class="my-3">
-      <% if @scheduled_tweets.failed_to_publish.any? %>
-        <%= render(partial: 'not_published_tweet', collection: @scheduled_tweets.failed_to_publish, as: :tweet, cached: false, locals: {preview_user: @preview_user}) %>
+      <% if @failed_tweets.any? %>
+        <%= render(partial: 'not_published_tweet', collection: @failed_tweets, as: :tweet, cached: false, locals: {preview_user: @preview_user}) %>
       <% else %>
         <%= t('.none') %>
       <% end %>
