@@ -6,8 +6,8 @@ class ScheduledTweetsController < ApplicationController
     if user_signed_in?
       tweets = current_user.scheduled_tweets
       @scheduled_tweets = tweets.will_be_published
-      @published_tweets = tweets.already_published.limit(10)
-      @failed_tweets = tweets.failed_to_publish.limit(10)
+      @published_tweets = tweets.already_published.order(time: :desc).limit(10).reverse
+      @failed_tweets = tweets.failed_to_publish.order(time: :desc).limit(10).reverse
     else
       @scheduled_tweets = ScheduledTweet.none
       @published_tweets = ScheduledTweet.none
