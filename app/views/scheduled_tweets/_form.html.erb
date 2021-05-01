@@ -71,6 +71,12 @@
         <%= t('.repeat_type_repeat_for_7days') %>
       </label>
     </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="repeat_type" id="repeat_type3" value="<%= ScheduledTweet::RepeatTypeValidator::VALUES[1] %>">
+      <label class="form-check-label" for="repeat_type3">
+        <%= t('.repeat_type_repeat_for_14days') %>
+      </label>
+    </div>
   </fieldset>
 
   <div>

@@ -121,16 +121,23 @@ class ScheduledTweet < ApplicationRecord
   end
 
   def copy_for_repeat(uploaded_files)
-    if repeat_type == ScheduledTweet::RepeatTypeValidator::VALUES[0]
-      6.times.map do |n|
-        ScheduledTweet.new(
-            user_id: user_id,
-            text: text,
-            time: time + (n + 1).days,
-            uploaded_files: uploaded_files,
-            repeat_type: repeat_type,
-        )
-      end
+    case repeat_type
+    when ScheduledTweet::RepeatTypeValidator::VALUES[0]
+      repeat_count = 6
+    when ScheduledTweet::RepeatTypeValidator::VALUES[1]
+      repeat_count = 13
+    else
+      raise "Invalid repeat_type value=#{repeat_type}"
+    end
+
+    repeat_count.times.map do |n|
+      ScheduledTweet.new(
+        user_id: user_id,
+        text: text,
+        time: time + (n + 1).days,
+        uploaded_files: uploaded_files,
+        repeat_type: repeat_type,
+      )
     end
   end
 
@@ -183,8 +190,8 @@ class ScheduledTweet < ApplicationRecord
     MAX_SIZE = 15000000
     CONTENT_TYPES = %w(image/jpeg image/png image/gif)
 
-    validates :size, numericality: {less_than: MAX_SIZE, message: I18n.t('activemodel.errors.messages.file_size_too_big')}
-    validates :content_type, inclusion: {in: CONTENT_TYPES, message: I18n.t('activemodel.errors.messages.invalid_content_type')}
+    validates :size, numericality: { less_than: MAX_SIZE, message: I18n.t('activemodel.errors.messages.file_size_too_big') }
+    validates :content_type, inclusion: { in: CONTENT_TYPES, message: I18n.t('activemodel.errors.messages.invalid_content_type') }
 
     def initialize(file:)
       @size = file.size
@@ -194,6 +201,6 @@ class ScheduledTweet < ApplicationRecord
   end
 
   class RepeatTypeValidator
-    VALUES = %w(repeat_for_7days)
+    VALUES = %w(repeat_for_7days repeat_for_14days)
   end
 end
