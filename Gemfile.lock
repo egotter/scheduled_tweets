@@ -70,7 +70,7 @@ GEM
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
     childprocess (3.0.0)
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.10)
     connection_pool (2.2.3)
     crass (1.0.6)
     devise (4.7.2)
@@ -92,8 +92,8 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    globalid (0.4.2)
-      activesupport (>= 4.2.0)
+    globalid (1.0.1)
+      activesupport (>= 5.0)
     hashie (4.1.0)
     hiredis (0.6.3)
     http (4.4.1)
@@ -107,7 +107,7 @@ GEM
     http-parser (1.2.1)
       ffi-compiler (>= 1.0, < 2.0)
     http_parser.rb (0.6.0)
-    i18n (1.8.5)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     idn-ruby (0.1.0)
     listen (3.1.5)
@@ -127,7 +127,7 @@ GEM
     mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.1)
+    minitest (5.17.0)
     multipart-post (2.1.1)
     mysql2 (0.5.3)
     naught (1.1.0)
@@ -251,7 +251,7 @@ GEM
     twitter-text (3.1.0)
       idn-ruby
       unf (~> 0.1.0)
-    tzinfo (1.2.7)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
@@ -271,7 +271,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.4.0)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   ruby
