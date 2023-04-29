@@ -26,6 +26,9 @@
 <%= waved_section do %>
   <div class="container">
     <%= offset_anchor('schedule-tweet') %>
+
+    <p class="text-danger my-3"><%= t('scheduled_tweets.index.service_stopped_html') %></p>
+
     <h2 class="h4 mt-5"><%= t('.create.title') %></h2>
 
     <div class="my-5"><%= t('.create.desc_html') %></div>
@@ -89,6 +92,9 @@
 <%= waved_section do %>
   <div class="container">
     <%= offset_anchor('how-to-use') %>
+
+    <p class="text-danger my-3"><%= t('scheduled_tweets.index.service_stopped_html') %></p>
+
     <h2 class="h4 mt-5"><%= t('.how_to_use.title') %></h2>
     <div class="my-5">
       <div class="mb-5"><%= t('.how_to_use.description') %></div>
@@ -118,6 +124,8 @@
 
 <script>
   $(function () {
+    window.alert('<%= t('scheduled_tweets.index.service_stopped_message') %>');
+
     var isSignedIn = <%= user_signed_in? %>;
     window.I18n = {
       delim: '<%= t('.delim') %>',

@@ -79,8 +79,10 @@
     </div>
   </fieldset>
 
+  <p class="text-danger my-3"><%= t('scheduled_tweets.index.service_stopped_html') %></p>
+
   <div>
-    <button style="" id="submit" type="submit" class="btn btn-success"><%= t('.create') %></button>
+    <button style="" id="submit" type="submit" class="btn btn-success" disabled><%= t('.create') %></button>
   </div>
 
   <%= hidden_field_tag :tweet_text, '', class: 'tweet-text' %>
